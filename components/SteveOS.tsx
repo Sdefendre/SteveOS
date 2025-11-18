@@ -14,9 +14,33 @@ import { YouTubeSection } from '@/components/YouTubeSection'
 import { GithubWidget } from '@/components/GithubWidget'
 import type { GithubRepo } from '@/lib/github'
 
+// Return the ordinal suffix (st, nd, rd, th) for a given day number.
+function getOrdinalSuffix(day: number): string {
+  if (day >= 11 && day <= 13) return 'th'
+  const remainder = day % 10
+  if (remainder === 1) return 'st'
+  if (remainder === 2) return 'nd'
+  if (remainder === 3) return 'rd'
+  return 'th'
+}
+
+// Build the complete hero sentence with today's date and the current time.
+function buildHeroDateMessage(date: Date): string {
+  const month = date.toLocaleString('en-US', { month: 'long' })
+  const day = date.getDate()
+  const year = date.getFullYear()
+  const formattedTime = date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
+  return `Today is ${month} ${day}${getOrdinalSuffix(day)} ${year} and it's ${formattedTime}.`
+}
+
 export default function SteveOS({ repos = [] }: { repos?: GithubRepo[] }) {
   const sortedBlogPosts = useMemo(() => {
     return [...BLOG_POSTS].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  }, [])
+
+  const heroDateMessage = useMemo(() => {
+    // Build a friendly sentence that shares today's date and the current time.
+    return buildHeroDateMessage(new Date())
   }, [])
 
   const ProjectCard = ({
@@ -133,7 +157,7 @@ export default function SteveOS({ repos = [] }: { repos?: GithubRepo[] }) {
                   What would you like to build today?
                 </p>
                 <p className="text-base sm:text-lg md:text-xl text-muted-foreground mb-6 sm:mb-8 leading-relaxed max-w-2xl">
-                  {SITE.mission}
+                  {heroDateMessage}
                 </p>
                 <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4">
                   <motion.div
@@ -198,11 +222,11 @@ export default function SteveOS({ repos = [] }: { repos?: GithubRepo[] }) {
         <YouTubeSection />
 
         <div className="container mx-auto px-4 max-w-5xl">
-          {/* Latest Writing */}
+          {/* Recent Thoughts */}
           <section className="py-12 sm:py-16 md:py-20">
             <div className="flex flex-col sm:flex-row sm:items-start justify-between mb-8 sm:mb-12 gap-3 sm:gap-4">
               <div>
-                <h2 className="text-xl sm:text-2xl font-bold mb-1 sm:mb-2">Writing</h2>
+                <h2 className="text-xl sm:text-2xl font-bold mb-1 sm:mb-2">Recent Thoughts</h2>
                 <p className="text-sm sm:text-base text-muted-foreground">
                   Thoughts on software, strategy, and tech.
                 </p>

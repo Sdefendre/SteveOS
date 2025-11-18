@@ -1,6 +1,15 @@
+'use client'
+
+import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Github, Star, GitFork, Calendar } from 'lucide-react'
+import { ExternalLink, Users, FileCode, Star, GitFork } from 'lucide-react'
 import { GithubRepo } from '@/lib/github'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Progress } from '@/components/ui/progress'
+import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
+import { SITE } from '@/constants/site'
 
 interface GithubWidgetProps {
   repos: GithubRepo[]
@@ -9,69 +18,111 @@ interface GithubWidgetProps {
 export function GithubWidget({ repos }: GithubWidgetProps) {
   if (!repos || repos.length === 0) return null
 
+  // Calculate a pseudo-progress based on recency to match the visual style
+  const getProgress = (dateString: string) => {
+    const daysSince = (new Date().getTime() - new Date(dateString).getTime()) / (1000 * 3600 * 24)
+    // Newer = higher progress. 0 days = 95%, 30 days = 20%
+    return Math.min(95, Math.max(15, 100 - daysSince * 2.5))
+  }
+
+  // Format date like "Due June 15, 2025" -> "Updated Nov 18, 2025"
+  const formatDate = (dateString: string) => {
+    return `Updated ${new Date(dateString).toLocaleDateString('en-US', {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    })}`
+  }
+
   return (
     <section className="py-8 sm:py-12">
-      <div className="flex items-center gap-2 sm:gap-3 mb-6 sm:mb-8">
-        <div className="p-1.5 sm:p-2 bg-accent rounded-lg">
-          <Github size={20} className="sm:w-6 sm:h-6" />
-        </div>
-        <div>
-          <h2 className="text-xl sm:text-2xl font-bold">Recent Activity</h2>
-          <p className="text-muted-foreground text-xs sm:text-sm">
-            Latest repositories I've been working on.
-          </p>
-        </div>
-      </div>
+      <Card className="w-full border-border/60 bg-card/50 backdrop-blur-sm shadow-sm">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-6">
+          <CardTitle className="text-xl sm:text-2xl font-bold">Active Projects</CardTitle>
+          <Button variant="ghost" size="sm" className="text-sm font-medium" asChild>
+            <Link href={SITE.github} target="_blank" rel="noopener noreferrer">
+              View All
+            </Link>
+          </Button>
+        </CardHeader>
+        <CardContent className="grid gap-6">
+          {repos.slice(0, 4).map((repo, index) => {
+            const progress = getProgress(repo.updated_at)
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-        {repos.map((repo, i) => (
-          <motion.a
-            key={repo.id}
-            href={repo.html_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block group"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1 }}
-            whileHover={{ y: -4 }}
-          >
-            <div className="h-full border border-border bg-card/50 hover:bg-card/80 p-4 sm:p-5 rounded-xl transition-all duration-300 hover:shadow-md hover:border-primary/30 flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between gap-2 mb-2 sm:mb-3">
-                  <h3 className="font-semibold truncate group-hover:text-primary transition-colors text-sm sm:text-base">
-                    {repo.name}
-                  </h3>
-                  <span className="text-xs font-mono bg-secondary/50 px-1.5 sm:px-2 py-0.5 rounded text-secondary-foreground shrink-0">
-                    {repo.language || 'Code'}
-                  </span>
-                </div>
-                <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2 mb-3 sm:mb-4 min-h-[2.5rem] sm:min-h-[2.75rem]">
-                  {repo.description || 'No description provided.'}
-                </p>
-              </div>
+            return (
+              <motion.div
+                key={repo.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <div className="flex flex-col gap-4">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="space-y-1">
+                      <h3 className="font-semibold text-base sm:text-lg leading-none tracking-tight">
+                        <a
+                          href={repo.html_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hover:underline underline-offset-4 decoration-primary/50"
+                        >
+                          {repo.name}
+                        </a>
+                      </h3>
+                      <p className="text-sm text-muted-foreground line-clamp-1">
+                        {repo.description || 'No description provided.'}
+                      </p>
+                    </div>
+                    <Badge
+                      variant="secondary"
+                      className="shrink-0 text-xs font-normal hidden sm:inline-flex"
+                    >
+                      {formatDate(repo.updated_at)}
+                    </Badge>
+                  </div>
 
-              <div className="flex items-center justify-between text-xs text-muted-foreground border-t border-border/50 pt-2 sm:pt-3 mt-auto flex-wrap gap-2">
-                <div className="flex gap-2 sm:gap-3">
-                  <span className="flex items-center gap-1">
-                    <Star size={11} className="sm:w-3 sm:h-3" /> {repo.stargazers_count}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <GitFork size={11} className="sm:w-3 sm:h-3" /> {repo.fork ? 'Fork' : 'Source'}
-                  </span>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-muted-foreground">Activity</span>
+                      <span className="font-medium">{Math.round(progress)}%</span>
+                    </div>
+                    <Progress value={progress} className="h-2" />
+                  </div>
+
+                  <div className="flex items-center justify-between text-xs text-muted-foreground">
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-1">
+                        <Users size={14} />
+                        <span>{repo.fork ? 'Collab' : 'Owner'}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <FileCode size={14} />
+                        <span>{repo.language || 'Text'}</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-1">
+                        <Star size={14} />
+                        <span>{repo.stargazers_count}</span>
+                      </div>
+                      <Badge
+                        variant="outline"
+                        className="sm:hidden text-[10px] py-0 h-5 border-border/50"
+                      >
+                        {new Date(repo.updated_at).toLocaleDateString(undefined, {
+                          month: 'short',
+                          day: 'numeric',
+                        })}
+                      </Badge>
+                    </div>
+                  </div>
                 </div>
-                <span className="flex items-center gap-1">
-                  <Calendar size={11} className="sm:w-3 sm:h-3" />
-                  {new Date(repo.updated_at).toLocaleDateString(undefined, {
-                    month: 'short',
-                    day: 'numeric',
-                  })}
-                </span>
-              </div>
-            </div>
-          </motion.a>
-        ))}
-      </div>
+                {index < Math.min(repos.length, 4) - 1 && <Separator className="mt-6" />}
+              </motion.div>
+            )
+          })}
+        </CardContent>
+      </Card>
     </section>
   )
 }
