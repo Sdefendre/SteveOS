@@ -181,7 +181,7 @@ const grok5Solutions = {
 
     <p>The future isn't coming – it's here. The question is what we do with it. Do we approach it with the same precision, integrity, and sense of responsibility that defined our military service? Do we ensure that AGI serves humanity rather than replacing it?</p>
 
-    <p>At Defendre Solutions, we're not just watching this revolution – we're preparing our clients for it. Because when the next paradigm shift happens, you want veterans on your team.</p>
+    <p>At SteveOS, we're not just watching this revolution – we're preparing our clients for it. Because when the next paradigm shift happens, you want veterans on your team.</p>
 
     <p>Ready to prepare your organization for the AGI future? <a href="#contact" class="text-blue-400 hover:text-blue-300">Let's build something that matters</a>.</p>
   `,

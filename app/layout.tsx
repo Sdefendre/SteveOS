@@ -1,10 +1,9 @@
 import type React from 'react'
-import { ThemeProvider } from "@/components/theme-provider"
+import { ThemeProvider } from '@/components/theme-provider'
 import type { Metadata } from 'next'
 import { Inter, Playfair_Display } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
-
 
 const inter = Inter({
   subsets: ['latin'],
@@ -20,42 +19,42 @@ const playfair = Playfair_Display({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Defendre Solutions - Veteran-Owned Software Development',
-    template: '%s | Defendre Solutions',
+    default: 'SteveOS - Personal Operating System',
+    template: '%s | SteveOS',
   },
   description:
-    'We turn strong ideas into resilient software. Veteran-owned, full-stack engineering firm specializing in AI-powered apps, MVP development, and government-ready SaaS solutions.',
+    'The personal digital headquarters of Steve Defendre. Showcasing projects, blog posts, and services.',
   keywords:
-    'veteran-owned software development, full-stack engineering, AI applications, MVP development, government SaaS, Next.js development, TypeScript',
+    'SteveOS, Steve Defendre, full-stack engineer, software development, portfolio, blog, veteran',
   authors: [
     { name: 'Steve Defendre', url: 'https://www.linkedin.com/in/joseph-m-defendre-a11a47225/' },
   ],
   creator: 'Steve Defendre',
-  publisher: 'Defendre Solutions',
+  publisher: 'SteveOS',
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://defendre-solutions.vercel.app'),
+  metadataBase: new URL('https://steve-os.vercel.app'),
   alternates: {
     canonical: '/',
     types: {
-      'application/rss+xml': [{ url: '/api/rss', title: 'Defendre Solutions Blog RSS Feed' }],
+      'application/rss+xml': [{ url: '/api/rss', title: 'SteveOS Blog RSS Feed' }],
     },
   },
   openGraph: {
-    title: 'Defendre Solutions - Veteran-Owned Software Development',
+    title: 'SteveOS - Personal Operating System',
     description:
-      'We turn strong ideas into resilient software. Veteran-owned, full-stack engineering firm.',
-    url: 'https://defendre-solutions.vercel.app',
-    siteName: 'Defendre Solutions',
+      'The personal digital headquarters of Steve Defendre. Showcasing projects, blog posts, and services.',
+    url: 'https://steve-os.vercel.app',
+    siteName: 'SteveOS',
     images: [
       {
-        url: '/defendre-logo.png',
+        url: '/logo.png',
         width: 1200,
         height: 630,
-        alt: 'Defendre Solutions - Veteran-Owned Software Development',
+        alt: 'SteveOS - Personal Operating System',
       },
     ],
     locale: 'en_US',
@@ -63,10 +62,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Defendre Solutions - Veteran-Owned Software Development',
-    description:
-      'We turn strong ideas into resilient software. Veteran-owned, full-stack engineering.',
-    images: ['/defendre-logo.png'],
+    title: 'SteveOS - Personal Operating System',
+    description: 'The personal digital headquarters of Steve Defendre.',
+    images: ['/logo.png'],
   },
   robots: {
     index: true,
@@ -89,15 +87,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <link rel="icon" href="/defendre-logo.png" type="image/png" sizes="32x32" />
-        <link rel="apple-touch-icon" href="/defendre-logo.png" sizes="180x180" />
-        <meta name="theme-color" content="#000000" />
+        <link rel="icon" href="/logo.png" type="image/png" sizes="32x32" />
+        <link rel="apple-touch-icon" href="/logo.png" sizes="180x180" />
+        <meta name="theme-color" content="#ffffff" />
       </head>
-      <body className={`${inter.variable} ${playfair.variable} font-sans antialiased bg-background text-foreground`}>
+      <body
+        className={`${inter.variable} ${playfair.variable} font-sans antialiased bg-background text-foreground`}
+      >
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="light"
+          forcedTheme="light"
+          enableSystem={false}
           disableTransitionOnChange
         >
           {children}

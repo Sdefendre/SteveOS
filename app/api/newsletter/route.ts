@@ -21,19 +21,16 @@ export async function POST(request: NextRequest) {
 
     // Validate email
     if (!email || !email.includes('@')) {
-      return NextResponse.json(
-        { error: 'Valid email address is required' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Valid email address is required' }, { status: 400 })
     }
 
     // Check if email configuration is available
     if (!process.env.GMAIL_APP_PASSWORD) {
       console.log(`Newsletter subscription (no email config): ${email}`)
       return NextResponse.json(
-        { 
+        {
           message: 'Successfully subscribed to newsletter!',
-          email: email
+          email: email,
         },
         { status: 200 }
       )
@@ -48,14 +45,14 @@ export async function POST(request: NextRequest) {
     }
 
     // Send welcome email to subscriber with glass morphism aesthetic
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://defendre-solutions.vercel.app'
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://steve-os.vercel.app'
     const welcomeEmailHtml = `
       <!DOCTYPE html>
       <html lang="en">
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Welcome to Defendre Solutions</title>
+        <title>Welcome to SteveOS</title>
       </head>
       <body style="margin: 0; padding: 0; background: linear-gradient(135deg, #000000 0%, #0c1e3d 50%, #000000 100%); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
         <div style="max-width: 600px; margin: 0 auto; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 24px; overflow: hidden;">
@@ -74,9 +71,9 @@ export async function POST(request: NextRequest) {
             </div>
             
             <h1 style="background: linear-gradient(135deg, #ffffff 0%, #3b82f6 50%, #ffffff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin: 0; font-size: 36px; font-weight: 700; line-height: 1.2;">
-              Welcome to Defendre Solutions!
+              Welcome to SteveOS!
             </h1>
-            <p style="color: #9ca3af; margin: 15px 0 0 0; font-size: 18px; font-weight: 500;">Military Precision Meets Modern Tech</p>
+            <p style="color: #9ca3af; margin: 15px 0 0 0; font-size: 18px; font-weight: 500;">Discipline, Precision, Resilience</p>
           </div>
           
           <!-- Main content -->
@@ -85,7 +82,7 @@ export async function POST(request: NextRequest) {
             <div style="background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 30px; margin-bottom: 30px;">
               <h2 style="color: #ffffff; margin: 0 0 20px 0; font-size: 24px; font-weight: 600;">Thanks for subscribing, ${email.split('@')[0]}!</h2>
               <p style="color: #d1d5db; line-height: 1.7; margin: 0 0 20px 0; font-size: 16px;">
-                You're now part of the Defendre Solutions community. You'll receive exclusive insights on:
+                You're now part of the SteveOS community. You'll receive exclusive insights on:
               </p>
               <ul style="color: #d1d5db; line-height: 1.8; margin: 0; padding-left: 0; list-style: none;">
                 <li style="padding: 8px 0; position: relative; padding-left: 25px;">
@@ -94,19 +91,11 @@ export async function POST(request: NextRequest) {
                 </li>
                 <li style="padding: 8px 0; position: relative; padding-left: 25px;">
                   <span style="position: absolute; left: 0; top: 14px; width: 6px; height: 6px; background: linear-gradient(135deg, #3b82f6, #9333ea); border-radius: 50%;"></span>
-                  Real-world case studies from veteran-owned software projects
+                  Real-world case studies and projects
                 </li>
                 <li style="padding: 8px 0; position: relative; padding-left: 25px;">
                   <span style="position: absolute; left: 0; top: 14px; width: 6px; height: 6px; background: linear-gradient(135deg, #3b82f6, #9333ea); border-radius: 50%;"></span>
                   Technical tutorials on full-stack development
-                </li>
-                <li style="padding: 8px 0; position: relative; padding-left: 25px;">
-                  <span style="position: absolute; left: 0; top: 14px; width: 6px; height: 6px; background: linear-gradient(135deg, #3b82f6, #9333ea); border-radius: 50%;"></span>
-                  Career insights for veterans in tech
-                </li>
-                <li style="padding: 8px 0; position: relative; padding-left: 25px;">
-                  <span style="position: absolute; left: 0; top: 14px; width: 6px; height: 6px; background: linear-gradient(135deg, #3b82f6, #9333ea); border-radius: 50%;"></span>
-                  Behind-the-scenes stories from client work
                 </li>
               </ul>
             </div>
@@ -115,8 +104,8 @@ export async function POST(request: NextRequest) {
             <div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 51, 234, 0.1) 100%); backdrop-filter: blur(10px); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 16px; padding: 30px; margin-bottom: 30px;">
               <h3 style="color: #3b82f6; margin: 0 0 15px 0; font-size: 20px; font-weight: 600;">About Steve Defendre</h3>
               <p style="color: #d1d5db; line-height: 1.7; margin: 0; font-size: 16px;">
-                Veteran, full-stack engineer, and founder of Defendre Solutions. I combine military discipline 
-                with modern software engineering to help businesses scale and veterans thrive in tech.
+                Veteran, full-stack engineer, and creator of SteveOS. I combine military discipline 
+                with modern software engineering to help businesses scale.
               </p>
             </div>
             
@@ -139,11 +128,9 @@ export async function POST(request: NextRequest) {
               <span style="color: #6b7280; font-size: 12px;">No spam, ever</span>
               <div style="width: 4px; height: 4px; background: rgba(59, 130, 246, 0.5); border-radius: 50%;"></div>
               <span style="color: #6b7280; font-size: 12px;">Unsubscribe anytime</span>
-              <div style="width: 4px; height: 4px; background: rgba(59, 130, 246, 0.5); border-radius: 50%;"></div>
-              <span style="color: #6b7280; font-size: 12px;">Privacy respected</span>
             </div>
             <p style="color: #6b7280; font-size: 14px; margin: 0; font-weight: 500;">
-              Defendre Solutions • Veteran-Owned Software Development
+              SteveOS • Personal Operating System
             </p>
           </div>
         </div>
@@ -160,33 +147,31 @@ export async function POST(request: NextRequest) {
     `
 
     const welcomeEmailText = `
-Welcome to Defendre Solutions Newsletter!
+Welcome to SteveOS Newsletter!
 
 Thanks for subscribing, ${email.split('@')[0]}!
 
-You're now part of the Defendre Solutions community. You'll receive exclusive insights on:
+You're now part of the SteveOS community. You'll receive exclusive insights on:
 • AI-powered development tools and techniques
-• Real-world case studies from veteran-owned software projects  
+• Real-world case studies
 • Technical tutorials on full-stack development
-• Career insights for veterans in tech
-• Behind-the-scenes stories from client work
 
 About Steve Defendre:
-Veteran, full-stack engineer, and founder of Defendre Solutions. I combine military discipline with modern software engineering to help businesses scale and veterans thrive in tech.
+Veteran, full-stack engineer, and creator of SteveOS. I combine military discipline with modern software engineering.
 
 Read the latest posts: ${siteUrl}/blog
 
 You can unsubscribe at any time by replying to any email.
 
-Defendre Solutions • Veteran-Owned Software Development
+SteveOS • Personal Operating System
     `
 
     // Send welcome email
     console.log('Sending welcome email...')
     await transporter.sendMail({
-      from: `"Defendre Solutions" <${process.env.GMAIL_USER || 'steve.defendre12@gmail.com'}>`,
+      from: `"SteveOS" <${process.env.GMAIL_USER || 'steve.defendre12@gmail.com'}>`,
       to: email,
-      subject: '🚀 Welcome to Defendre Solutions Newsletter!',
+      subject: '🚀 Welcome to SteveOS Newsletter!',
       text: welcomeEmailText,
       html: welcomeEmailHtml,
     })
@@ -210,13 +195,12 @@ Defendre Solutions • Veteran-Owned Software Development
     console.log(`Newsletter subscription completed: ${email}`)
 
     return NextResponse.json(
-      { 
+      {
         message: 'Successfully subscribed to newsletter!',
-        email: email
+        email: email,
       },
       { status: 200 }
     )
-
   } catch (error) {
     console.error('Newsletter subscription error:', error)
     return NextResponse.json(

@@ -1,11 +1,13 @@
 export const SITE = {
-  name: "Steve Defendre",
-  email: "steve.defendre12@gmail.com",
-  linkedin: "https://www.linkedin.com/in/joseph-m-defendre-a11a47225/",
-  github: "https://github.com/Sdefendre",
-  tagline: "Full-Stack Engineer & Veteran",
-  mission: "I build resilient software for ambitious ideas. Combining military discipline with modern engineering to deliver scalable, high-performance web applications.",
-  title: "Steve Defendre - Full-Stack Engineer",
-  description: "Personal portfolio of Steve Defendre, a veteran and full-stack engineer specializing in Next.js, TypeScript, and AI-powered applications.",
-  url: "https://defendre-solutions.vercel.app"
+  name: 'SteveOS',
+  email: 'steve.defendre12@gmail.com',
+  linkedin: 'https://www.linkedin.com/in/joseph-m-defendre-a11a47225/',
+  github: 'https://github.com/Sdefendre',
+  youtube: 'https://www.youtube.com/@Stevedefendre',
+  tagline: 'Personal Operating System',
+  mission: 'A centralized hub for my projects and thoughts. Built with precision and discipline.',
+  title: 'SteveOS - Personal Portfolio',
+  description:
+    'The personal digital headquarters of Steve Defendre. Showcasing projects, blog posts, and services.',
+  url: 'https://steve-os.vercel.app',
 }

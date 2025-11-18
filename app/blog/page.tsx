@@ -1,15 +1,17 @@
-"use client"
+'use client'
 
-import { motion } from "framer-motion"
-import Link from "next/link"
-import { ArrowRight } from "lucide-react"
-import { SiteHeader } from "@/components/SiteHeader"
-import { BLOG_POSTS } from "@/constants/blog"
-import { createFadeInUp, viewportOnce } from "@/lib/motion"
-import { NewsletterSubscription } from "@/components/NewsletterSubscription"
+import { motion } from 'framer-motion'
+import Link from 'next/link'
+import { ArrowRight } from 'lucide-react'
+import { SiteHeader } from '@/components/SiteHeader'
+import { BLOG_POSTS } from '@/constants/blog'
+import { createFadeInUp, viewportOnce } from '@/lib/motion'
+import { NewsletterSubscription } from '@/components/NewsletterSubscription'
 
 export default function BlogPage() {
-  const sortedPosts = [...BLOG_POSTS].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  const sortedPosts = [...BLOG_POSTS].sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+  )
 
   return (
     <div className="min-h-screen bg-background text-foreground font-sans selection:bg-primary/20">
@@ -30,8 +32,9 @@ export default function BlogPage() {
               variants={createFadeInUp(false)}
               initial="initial"
               whileInView="animate"
+              whileHover={{ x: 6 }}
               viewport={viewportOnce}
-              className="group"
+              className="group transition-all duration-300 hover:bg-accent/30 rounded-lg p-4 -mx-4"
             >
               <Link href={`/blog/${post.id}`} className="block">
                 <div className="flex flex-col md:flex-row md:items-baseline justify-between mb-3">
@@ -39,14 +42,19 @@ export default function BlogPage() {
                     {post.title}
                   </h2>
                   <time className="text-sm text-muted-foreground whitespace-nowrap mt-1 md:mt-0 md:ml-4">
-                    {new Date(post.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                    {new Date(post.date).toLocaleDateString('en-US', {
+                      month: 'long',
+                      day: 'numeric',
+                      year: 'numeric',
+                    })}
                   </time>
                 </div>
-                <p className="text-muted-foreground leading-relaxed mb-3">
-                  {post.excerpt}
-                </p>
+                <p className="text-muted-foreground leading-relaxed mb-3">{post.excerpt}</p>
                 <div className="flex items-center gap-2 text-sm font-medium text-primary/80 group-hover:text-primary transition-colors">
-                  Read more <ArrowRight size={14} />
+                  Read more{' '}
+                  <motion.span whileHover={{ x: 5 }} className="inline-block">
+                    <ArrowRight size={14} />
+                  </motion.span>
                 </div>
               </Link>
             </motion.article>

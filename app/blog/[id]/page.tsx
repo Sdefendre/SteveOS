@@ -26,10 +26,12 @@ export default async function BlogPostPage({ params }: { params: Params }) {
   const post = BLOG_POSTS.find((p) => p.id === id)
   if (!post) {
     return (
-      <main className="min-h-screen bg-black text-white p-6">
+      <main className="min-h-screen bg-background text-foreground p-6">
         <div className="max-w-3xl mx-auto">
           <p>Post not found.</p>
-          <Link href="/blog" className="text-blue-400 underline">Back to blog</Link>
+          <Link href="/blog" className="text-primary underline">
+            Back to blog
+          </Link>
         </div>
       </main>
     )
@@ -45,12 +47,14 @@ export default async function BlogPostPage({ params }: { params: Params }) {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white relative">
-
+    <div className="min-h-screen bg-background text-foreground relative">
       <div className="relative z-10">
-        <header className="fixed top-0 left-0 right-0 glass-header z-40">
+        <header className="fixed top-0 left-0 right-0 backdrop-blur-md bg-background/80 border-b border-border z-40">
           <nav className="mx-auto max-w-4xl px-6 py-4 flex items-center justify-between">
-            <Link href="/blog" className="glass-button px-4 py-2 rounded-full flex items-center gap-2 hover:scale-105 transition-transform">
+            <Link
+              href="/blog"
+              className="bg-secondary hover:bg-secondary/80 text-secondary-foreground px-4 py-2 rounded-full flex items-center gap-2 hover:scale-105 active:scale-95 transition-transform"
+            >
               <ArrowLeft size={20} /> Back to Blog
             </Link>
           </nav>
@@ -60,19 +64,39 @@ export default async function BlogPostPage({ params }: { params: Params }) {
           <article className="max-w-4xl mx-auto">
             <div className="flex flex-wrap gap-2 mb-6">
               {post.tags.map((tag, i) => (
-                <span key={i} className="glass-badge rounded-full px-3 py-1 text-sm text-blue-300 flex items-center gap-1">
+                <span
+                  key={i}
+                  className="bg-secondary text-secondary-foreground rounded-full px-3 py-1 text-sm flex items-center gap-1"
+                >
                   <Tag size={12} /> {tag}
                 </span>
               ))}
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 font-serif">{post.title}</h1>
-            <div className="flex flex-wrap items-center gap-6 text-gray-400 mb-12 pb-6 border-b border-white/10">
-              <div className="flex items-center gap-2"><User size={16} /><span>{post.author}</span></div>
-              <div className="flex items-center gap-2"><Calendar size={16} /><span>{new Date(post.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span></div>
-              <div className="flex items-center gap-2"><Clock size={16} /><span>{post.readTime}</span></div>
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6 font-serif">
+              {post.title}
+            </h1>
+            <div className="flex flex-wrap items-center gap-6 text-muted-foreground mb-12 pb-6 border-b border-border">
+              <div className="flex items-center gap-2">
+                <User size={16} />
+                <span>{post.author}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Calendar size={16} />
+                <span>
+                  {new Date(post.date).toLocaleDateString('en-US', {
+                    month: 'long',
+                    day: 'numeric',
+                    year: 'numeric',
+                  })}
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Clock size={16} />
+                <span>{post.readTime}</span>
+              </div>
             </div>
             <div
-              className="prose prose-lg prose-invert max-w-none"
+              className="prose prose-lg max-w-none prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-a:text-primary"
               dangerouslySetInnerHTML={{ __html: post.content }}
             />
             {/* Enhance code blocks after hydration */}
@@ -80,7 +104,10 @@ export default async function BlogPostPage({ params }: { params: Params }) {
           </article>
         </main>
       </div>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
     </div>
   )
 }

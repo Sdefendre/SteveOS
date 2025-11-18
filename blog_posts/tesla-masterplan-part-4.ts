@@ -62,7 +62,7 @@ export const postTeslaMP4 = {
       <li><strong>Ops re‑engineering:</strong> Processes are redesigned around automation cells and software‑defined lines — not retrofits.</li>
     </ul>
 
-    <h3>How Defendre Solutions Helps</h3>
+    <h3>How SteveOS Helps</h3>
     <ul>
       <li><strong>Readiness assessments:</strong> We audit your processes, safety requirements, and data to identify automation candidates with clear ROI.</li>
       <li><strong>Pilots and prototypes:</strong> Build small, de‑risked pilots for autonomous workflows, robotics cells, and energy control loops.</li>
