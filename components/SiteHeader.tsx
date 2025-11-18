@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Menu, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+
 import { ThemeToggle } from '@/components/theme-toggle'
 
 export function SiteHeader() {

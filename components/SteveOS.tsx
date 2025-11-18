@@ -1,21 +1,20 @@
 'use client'
 
 import { useMemo } from 'react'
-import { motion, useReducedMotion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { ArrowRight, ExternalLink, Github, Linkedin, Mail } from 'lucide-react'
 import { SITE } from '@/constants/site'
 import { PROJECTS } from '@/constants/projects'
 import { BLOG_POSTS } from '@/constants/blog'
 import type { ProjectLinks } from '@/constants/projects'
-import { createFadeInUp, viewportOnce } from '@/lib/motion'
 
 import { SiteHeader } from '@/components/SiteHeader'
 import { YouTubeSection } from '@/components/YouTubeSection'
+import { GithubWidget } from '@/components/GithubWidget'
+import type { GithubRepo } from '@/lib/github'
 
-export default function SteveOS() {
-  const prefersReduced = !!useReducedMotion()
-
+export default function SteveOS({ repos = [] }: { repos?: GithubRepo[] }) {
   const sortedBlogPosts = useMemo(() => {
     return [...BLOG_POSTS].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
   }, [])
@@ -34,10 +33,6 @@ export default function SteveOS() {
     metrics?: string
   }) => (
     <motion.article
-      variants={createFadeInUp(prefersReduced)}
-      initial="initial"
-      whileInView="animate"
-      viewport={viewportOnce}
       className="group border border-border rounded-lg p-6 transition-all duration-300 hover:shadow-lg hover:border-primary/50"
       whileHover={{ y: -5 }}
     >
@@ -102,10 +97,6 @@ export default function SteveOS() {
   }) => (
     <Link href={`/blog/${id}`} className="block group">
       <motion.article
-        variants={createFadeInUp(prefersReduced)}
-        initial="initial"
-        whileInView="animate"
-        viewport={viewportOnce}
         className="py-4 border-b border-border group-last:border-0 transition-colors hover:bg-accent/30 rounded-lg px-4 -mx-4"
         whileHover={{ x: 4 }}
       >
@@ -194,6 +185,8 @@ export default function SteveOS() {
               ))}
             </div>
           </section>
+
+          <GithubWidget repos={repos} />
         </div>
 
         <YouTubeSection />
@@ -226,10 +219,10 @@ export default function SteveOS() {
           <section id="contact" className="py-20 border-t border-border">
             <div className="grid md:grid-cols-2 gap-12">
               <div>
-                <h2 className="text-2xl font-bold mb-4">Let's connect</h2>
+                <h2 className="text-2xl font-bold mb-4">Let&apos;s connect</h2>
                 <p className="text-muted-foreground mb-8 leading-relaxed">
-                  I'm always open to discussing new projects, opportunities, or just chatting about
-                  tech.
+                  I&apos;m always open to discussing new projects, opportunities, or just chatting
+                  about tech.
                 </p>
                 <div className="flex flex-col gap-3">
                   <a

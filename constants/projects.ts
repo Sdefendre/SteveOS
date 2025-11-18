@@ -13,12 +13,12 @@ export type Project = {
 
 export const PROJECTS: Project[] = [
   {
-    title: 'Defendre Solutions',
-    tag: 'Software Agency',
-    desc: 'Veteran-owned software development company specializing in scalable web platforms, AI-powered analytics, and digital transformation for small businesses.',
-    metrics: 'Veteran-Owned • Full-Stack Development • AI Solutions',
+    title: 'SteveOS',
+    tag: 'Personal Portfolio',
+    desc: 'My personal digital headquarters. A comprehensive portfolio and blog built with Next.js 15, Tailwind CSS, and Framer Motion.',
+    metrics: 'Open Source • Next.js 15 • Personal Identity',
     links: {
-      live: 'https://defendresolutions.com',
+      live: 'https://steve-os.vercel.app',
     },
   },
   {

@@ -1,5 +1,7 @@
 import SteveOS from '@/components/SteveOS'
+import { getRecentRepos } from '@/lib/github'
 
-export default function HomePage() {
-  return <SteveOS />
+export default async function HomePage() {
+  const repos = await getRecentRepos('Sdefendre')
+  return <SteveOS repos={repos} />
 }

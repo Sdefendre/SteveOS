@@ -33,44 +33,32 @@ export async function POST(request: NextRequest) {
 
     // Simple security check (in production, use proper authentication)
     if (!process.env.NEWSLETTER_SECRET_KEY) {
-      return NextResponse.json(
-        { error: 'Newsletter secret key not configured' },
-        { status: 500 }
-      )
+      return NextResponse.json({ error: 'Newsletter secret key not configured' }, { status: 500 })
     }
-    
+
     if (secretKey !== process.env.NEWSLETTER_SECRET_KEY) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     // Validate blog post ID
     if (!blogPostId) {
-      return NextResponse.json(
-        { error: 'Blog post ID is required' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Blog post ID is required' }, { status: 400 })
     }
 
     // Find the blog post
-    const blogPost = BLOG_POSTS.find(post => post.id === blogPostId)
+    const blogPost = BLOG_POSTS.find((post) => post.id === blogPostId)
     if (!blogPost) {
-      return NextResponse.json(
-        { error: 'Blog post not found' },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: 'Blog post not found' }, { status: 404 })
     }
 
     // Check if email configuration is available
     if (!process.env.GMAIL_APP_PASSWORD) {
       console.log(`Blog newsletter request (no email config): ${blogPostId}`)
       return NextResponse.json(
-        { 
+        {
           message: 'Newsletter would be sent (email not configured)',
           blogPost: blogPost.title,
-          subscriberCount: 0
+          subscriberCount: 0,
         },
         { status: 200 }
       )
@@ -78,27 +66,29 @@ export async function POST(request: NextRequest) {
 
     // Get active subscribers
     const subscribers = getActiveSubscribers()
-    
+
     if (subscribers.length === 0) {
       return NextResponse.json(
-        { 
+        {
           message: 'No active subscribers found',
-          blogPost: blogPost.title
+          blogPost: blogPost.title,
         },
         { status: 200 }
       )
     }
 
-    console.log(`Sending blog newsletter for "${blogPost.title}" to ${subscribers.length} subscribers`)
+    console.log(
+      `Sending blog newsletter for "${blogPost.title}" to ${subscribers.length} subscribers`
+    )
 
     // Create newsletter HTML
     const newsletterHtml = createBlogNewsletterHtml(blogPost)
     const newsletterText = createBlogNewsletterText(blogPost)
 
     // Send emails to all subscribers
-    const emailPromises = subscribers.map(subscriber => 
+    const emailPromises = subscribers.map((subscriber) =>
       transporter.sendMail({
-        from: `"Defendre Solutions" <${process.env.GMAIL_USER || 'steve.defendre12@gmail.com'}>`,
+        from: `"SteveOS" <${process.env.GMAIL_USER || 'steve.defendre12@gmail.com'}>`,
         to: subscriber.email,
         subject: `📚 New Blog Post: ${blogPost.title}`,
         text: newsletterText,
@@ -125,14 +115,13 @@ export async function POST(request: NextRequest) {
     console.log(`Blog newsletter sent successfully to ${subscribers.length} subscribers`)
 
     return NextResponse.json(
-      { 
+      {
         message: 'Blog newsletter sent successfully!',
         blogPost: blogPost.title,
-        subscriberCount: subscribers.length
+        subscriberCount: subscribers.length,
       },
       { status: 200 }
     )
-
   } catch (error) {
     console.error('Blog newsletter error:', error)
     return NextResponse.json(
@@ -143,9 +132,9 @@ export async function POST(request: NextRequest) {
 }
 
 function createBlogNewsletterHtml(blogPost: BlogPost) {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://defendre-solutions.vercel.app'
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://steve-os.vercel.app'
   const postUrl = `${siteUrl}/blog/${blogPost.id}`
-  
+
   return `
     <!DOCTYPE html>
     <html lang="en">
@@ -173,7 +162,7 @@ function createBlogNewsletterHtml(blogPost: BlogPost) {
           <h1 style="background: linear-gradient(135deg, #ffffff 0%, #3b82f6 50%, #ffffff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin: 0; font-size: 28px; font-weight: 700; line-height: 1.2;">
             New Blog Post Published!
           </h1>
-          <p style="color: #9ca3af; margin: 15px 0 0 0; font-size: 16px;">Fresh insights from Defendre Solutions</p>
+          <p style="color: #9ca3af; margin: 15px 0 0 0; font-size: 16px;">Fresh insights from SteveOS</p>
         </div>
         
         <!-- Main content -->
@@ -181,9 +170,13 @@ function createBlogNewsletterHtml(blogPost: BlogPost) {
           <!-- Blog post preview -->
           <div style="background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 30px; margin-bottom: 30px;">
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
-              ${blogPost.tags.map(tag => `
+              ${blogPost.tags
+                .map(
+                  (tag) => `
                 <span style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(147, 51, 234, 0.2)); border: 1px solid rgba(59, 130, 246, 0.3); color: #60a5fa; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 500;">${tag}</span>
-              `).join('')}
+              `
+                )
+                .join('')}
             </div>
             
             <h2 style="color: #ffffff; margin: 0 0 15px 0; font-size: 24px; font-weight: 600; line-height: 1.3;">
@@ -195,10 +188,10 @@ function createBlogNewsletterHtml(blogPost: BlogPost) {
             </p>
             
             <div style="display: flex; align-items: center; gap: 15px; color: #9ca3af; font-size: 14px; margin-bottom: 25px;">
-              <span>📅 ${new Date(blogPost.date).toLocaleDateString('en-US', { 
-                month: 'long', 
-                day: 'numeric', 
-                year: 'numeric' 
+              <span>📅 ${new Date(blogPost.date).toLocaleDateString('en-US', {
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric',
               })}</span>
               <span>⏱️ ${blogPost.readTime}</span>
               <span>👤 ${blogPost.author}</span>
@@ -236,7 +229,7 @@ function createBlogNewsletterHtml(blogPost: BlogPost) {
             </a>
           </div>
           <p style="color: #6b7280; font-size: 14px; margin: 0; font-weight: 500;">
-            Defendre Solutions • Veteran-Owned Software Development
+            SteveOS • Personal Operating System
           </p>
         </div>
       </div>
@@ -246,9 +239,9 @@ function createBlogNewsletterHtml(blogPost: BlogPost) {
 }
 
 function createBlogNewsletterText(blogPost: BlogPost) {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://defendre-solutions.vercel.app'
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://steve-os.vercel.app'
   const postUrl = `${siteUrl}/blog/${blogPost.id}`
-  
+
   return `
 New Blog Post Published!
 
@@ -266,7 +259,7 @@ Read the full article: ${postUrl}
 Browse all posts: ${siteUrl}/blog
 
 ---
-Defendre Solutions • Veteran-Owned Software Development
+SteveOS • Personal Operating System
 Unsubscribe by replying to this email
   `
 }

@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Blog: Added "DreamGuard: The Subconscious Sentinel" post
+- Blog: Added "PulsePod: The Rhythm of Life" post
+- Blog: Added "Sentinel Mirror: Reflection Redefined" post
+- Blog: Added "LifeLine X: The Ultimate Safety Net" post
 - Blog: Per-post routes (`/blog/[id]`), tag filter bar with `?tag=` links, clickable tags on cards
 - Success Stories: Clickable case study cards linking to live sites
 - Animations: Shared motion utilities (`lib/motion.ts`) and reduced-motion support
