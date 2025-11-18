@@ -7,7 +7,7 @@ import { SiteHeader } from '@/components/SiteHeader'
 import { PROJECTS } from '@/constants/projects'
 import { createFadeInUp, viewportOnce } from '@/lib/motion'
 
-export default function SuccessStoriesPage() {
+export default function WorkPage() {
   return (
     <div className="min-h-screen bg-background text-foreground font-sans selection:bg-primary/20">
       <SiteHeader />

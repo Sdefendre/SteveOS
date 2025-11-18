@@ -1,6 +1,7 @@
 export const postAfterScarcity = {
     id: 'after-scarcity',
     title: 'After Scarcity: Why Humanity Is Rich Enough To Stop Letting People Suffer',
+    youtubeId: 'FDKhhWqVVRU',
     excerpt: 'We’re living in a new era I call “after scarcity”: a world where, technically, we have enough food, energy, and productive capacity to guarantee every human a baseline of safety and dignity.',
     content: `
     <p>We were all raised on the same story:</p>

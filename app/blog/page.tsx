@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, Play, FileText } from 'lucide-react'
 import { SiteHeader } from '@/components/SiteHeader'
 import { BLOG_POSTS } from '@/constants/blog'
 import { createFadeInUp, viewportOnce } from '@/lib/motion'
@@ -19,7 +19,7 @@ export default function BlogPage() {
 
       <main className="container mx-auto px-4 max-w-3xl py-20">
         <div className="mb-16">
-          <h1 className="text-4xl font-bold tracking-tight mb-4">Writing</h1>
+          <h1 className="text-4xl font-bold tracking-tight mb-4">Writing & Videos</h1>
           <p className="text-xl text-muted-foreground leading-relaxed">
             Thoughts on software engineering, system design, and building products.
           </p>
@@ -38,7 +38,13 @@ export default function BlogPage() {
             >
               <Link href={`/blog/${post.id}`} className="block">
                 <div className="flex flex-col md:flex-row md:items-baseline justify-between mb-3">
-                  <h2 className="text-2xl font-semibold group-hover:underline underline-offset-4 decoration-muted-foreground/50">
+                  <h2 className="text-2xl font-semibold group-hover:underline underline-offset-4 decoration-muted-foreground/50 flex items-center gap-2">
+                    {/* @ts-ignore */}
+                    {post.youtubeId ? (
+                      <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-red-100 text-red-600 mr-1 shrink-0">
+                        <Play size={14} fill="currentColor" />
+                      </span>
+                    ) : null}
                     {post.title}
                   </h2>
                   <time className="text-sm text-muted-foreground whitespace-nowrap mt-1 md:mt-0 md:ml-4">
@@ -51,7 +57,8 @@ export default function BlogPage() {
                 </div>
                 <p className="text-muted-foreground leading-relaxed mb-3">{post.excerpt}</p>
                 <div className="flex items-center gap-2 text-sm font-medium text-primary/80 group-hover:text-primary transition-colors">
-                  Read more{' '}
+                  {/* @ts-ignore */}
+                  {post.youtubeId ? 'Watch video' : 'Read more'}{' '}
                   <motion.span whileHover={{ x: 5 }} className="inline-block">
                     <ArrowRight size={14} />
                   </motion.span>

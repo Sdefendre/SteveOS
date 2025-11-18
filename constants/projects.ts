@@ -13,6 +13,15 @@ export type Project = {
 
 export const PROJECTS: Project[] = [
   {
+    title: 'Defendre Solutions',
+    tag: 'Software Agency',
+    desc: 'Veteran-owned software development company specializing in AI, automation, and modern web solutions for small businesses.',
+    metrics: 'Veteran Owned • AI & Automation • Full Stack',
+    links: {
+      live: 'https://defendresolutions.com',
+    },
+  },
+  {
     title: 'SteveOS',
     tag: 'Personal Portfolio',
     desc: 'My personal digital headquarters. A comprehensive portfolio and blog built with Next.js 15, Tailwind CSS, and Framer Motion.',

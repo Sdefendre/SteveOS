@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { ArrowLeft, Calendar, Clock, User, Tag } from 'lucide-react'
 import { BLOG_POSTS } from '@/constants/blog'
 import { CodeBlockEnhancer } from '@/components/CodeBlockEnhancer'
+import { YouTubeEmbed } from '@/components/YouTubeEmbed'
 
 type Params = Promise<{ id: string }>
 
@@ -95,6 +96,17 @@ export default async function BlogPostPage({ params }: { params: Params }) {
                 <span>{post.readTime}</span>
               </div>
             </div>
+
+            {/* YouTube Embed */}
+            {/* @ts-ignore - YouTubeId is optional */}
+            {post.youtubeId && (
+              <YouTubeEmbed 
+                // @ts-ignore
+                videoId={post.youtubeId} 
+                title={post.title} 
+              />
+            )}
+
             <div
               className="prose prose-lg max-w-none prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-a:text-primary"
               dangerouslySetInnerHTML={{ __html: post.content }}

@@ -14,14 +14,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Blog: Added "Sentinel Mirror: Reflection Redefined" post
 - Blog: Added "LifeLine X: The Ultimate Safety Net" post
 - Blog: Per-post routes (`/blog/[id]`), tag filter bar with `?tag=` links, clickable tags on cards
-- Success Stories: Clickable case study cards linking to live sites
+- Work: Clickable case study cards linking to live sites
 - Animations: Shared motion utilities (`lib/motion.ts`) and reduced-motion support
 - SEO: Dynamic `sitemap.ts` and `robots.ts`, JSON-LD on blog posts
 - DX: Prettier + Husky + lint-staged, GitHub Actions CI (type-check, lint, build)
 - Structure: Split `constants.tsx` into `constants/{site,services,projects,blog,testimonials}.ts`
 - Multi-page architecture with dedicated routes
 - Services page with interactive category tabs and keyboard navigation (arrow keys, Home/End)
-- Success stories page combining case studies and testimonials with metrics
+- Work page combining case studies and testimonials with metrics
 - About page with company story and team information
 - Blog functionality with dedicated listing page
 - Blog post cards with glassmorphism design and comprehensive content
@@ -38,8 +38,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Transformed from portfolio to consultancy-focused website
-- Homepage restructured with mission, services preview, success stories preview
-- Navigation updated with new page links (Services, Success Stories, About)
+- Homepage restructured with mission, services preview, work preview
+- Navigation updated with new page links (Services, Work, About)
+- Route renamed from `/success-stories` to `/work` for consistency
 - Contact section redesigned with project information instead of contact form
 - Services moved from hardcoded to data-driven via SERVICES constant
 - Projects enhanced with metrics and improved card design

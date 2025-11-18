@@ -143,7 +143,7 @@ export default function SteveOS({ repos = [] }: { repos?: GithubRepo[] }) {
               <div className="flex flex-wrap gap-4">
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                   <Link
-                    href="/success-stories"
+                    href="/work"
                     className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-md font-medium hover:bg-primary/90 transition-colors shadow-md hover:shadow-xl"
                   >
                     View My Work <ArrowRight size={16} />
@@ -171,7 +171,7 @@ export default function SteveOS({ repos = [] }: { repos?: GithubRepo[] }) {
                 <p className="text-muted-foreground">Recent projects and experiments.</p>
               </div>
               <Link
-                href="/success-stories"
+                href="/work"
                 className="group text-sm font-medium hover:underline underline-offset-4 flex items-center gap-1"
               >
                 View all projects{' '}

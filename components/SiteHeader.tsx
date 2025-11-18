@@ -31,7 +31,7 @@ export function SiteHeader() {
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
-            <Link href="/success-stories" className="hover:text-primary/80 transition-colors">
+            <Link href="/work" className="hover:text-primary/80 transition-colors">
               Work
             </Link>
             <Link href="/blog" className="hover:text-primary/80 transition-colors">
@@ -76,7 +76,7 @@ export function SiteHeader() {
           >
             <nav className="flex flex-col p-4 space-y-4 text-sm font-medium">
               <Link
-                href="/success-stories"
+                href="/work"
                 className="py-2 border-b border-border/50"
                 onClick={() => setMobileMenuOpen(false)}
               >
