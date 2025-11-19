@@ -726,7 +726,7 @@ export default function DashboardPage() {
 
   if (isLoading) {
     return (
-      <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4 max-[430px]:grid-cols-2 max-[430px]:gap-3">
         <DashboardCardSkeleton />
         <DashboardCardSkeleton />
         <DashboardCardSkeleton />
@@ -737,8 +737,8 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="grid flex-1 items-start gap-4 p-3 sm:p-4 md:gap-6 lg:gap-8">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 mb-2">
+    <div className="grid flex-1 items-start gap-4 p-3 sm:p-4 md:gap-6 lg:gap-8 max-[430px]:gap-3">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 mb-2 max-[430px]:gap-2 max-[430px]:mb-1">
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight min-h-[2rem] sm:min-h-[2.25rem]">
           {dateData.month || (
             <div className="h-8 sm:h-9 w-40 sm:w-48 bg-muted animate-pulse rounded-md" />
@@ -781,10 +781,10 @@ export default function DashboardPage() {
                 {upcomingWithinThirtyDays.length} bill
                 {upcomingWithinThirtyDays.length === 1 ? '' : 's'} due in the next 30 days.
               </p>
-              <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+              <div className="space-y-2 max-h-48 overflow-y-auto pr-1 max-[430px]:max-h-40">
                 {sortedBills.map((bill) => (
                   <div
-                    className="flex items-center justify-between rounded-lg border px-3 py-2 text-sm"
+                    className="flex items-center justify-between rounded-lg border px-3 py-2 text-sm max-[430px]:flex-col max-[430px]:items-start max-[430px]:gap-2 max-[430px]:text-xs"
                     key={bill.id}
                   >
                     <div>
@@ -813,7 +813,7 @@ export default function DashboardPage() {
         </Dialog>
       </div>
 
-      <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 max-[430px]:grid-cols-2 max-[430px]:gap-2">
         <Card
           className="cursor-pointer hover:border-primary/50 transition-colors"
           onClick={() => handleCardClick('balance')}
@@ -920,7 +920,7 @@ export default function DashboardPage() {
         </Card>
       </div>
 
-      <div className="grid gap-4 sm:gap-6 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-4 sm:gap-6 md:gap-8 lg:grid-cols-2 xl:grid-cols-3 max-[430px]:gap-3">
         <Card className="xl:col-span-2">
           <CardHeader>
             <CardTitle className="text-lg sm:text-xl">Spending Overview</CardTitle>
@@ -1048,7 +1048,7 @@ export default function DashboardPage() {
         </Card>
       </div>
 
-      <div className="grid gap-4 sm:gap-6 md:gap-8 lg:grid-cols-2">
+      <div className="grid gap-4 sm:gap-6 md:gap-8 lg:grid-cols-2 max-[430px]:gap-3">
         <Card>
           <CardHeader>
             <CardTitle className="text-lg sm:text-xl">Savings Goal Forecast</CardTitle>
@@ -1122,7 +1122,7 @@ export default function DashboardPage() {
               {nextBills.map((bill) => (
                 <div
                   key={bill.id}
-                  className="flex items-center justify-between rounded-lg border px-3 py-2 text-sm"
+                  className="flex items-center justify-between rounded-lg border px-3 py-2 text-sm max-[430px]:flex-col max-[430px]:items-start max-[430px]:gap-2 max-[430px]:text-xs"
                 >
                   <div>
                     <p className="font-medium">{bill.name}</p>
@@ -1156,7 +1156,7 @@ export default function DashboardPage() {
         </Card>
       </div>
 
-      <div className="grid gap-4 sm:gap-6 md:gap-8 lg:grid-cols-3">
+      <div className="grid gap-4 sm:gap-6 md:gap-8 lg:grid-cols-3 max-[430px]:gap-3">
         <Card className="lg:col-span-2">
           <CardHeader className="flex flex-col gap-4">
             <div className="flex flex-col sm:flex-row sm:items-center gap-3">
@@ -1257,7 +1257,7 @@ export default function DashboardPage() {
             </div>
           </CardContent>
         </Card>
-        <div className="grid gap-4 lg:col-span-1">
+        <div className="grid gap-4 lg:col-span-1 max-[430px]:gap-3">
           <Card>
             <CardHeader>
               <CardTitle className="text-lg sm:text-xl">Budget Status</CardTitle>
@@ -1265,7 +1265,7 @@ export default function DashboardPage() {
                 Track your monthly budget limits.
               </CardDescription>
             </CardHeader>
-            <CardContent className="grid gap-4 sm:gap-6">
+            <CardContent className="grid gap-4 sm:gap-6 max-[430px]:gap-3">
               {budgetCategories.map((category) => (
                 <div
                   className="flex items-center justify-between gap-3 sm:gap-4"
@@ -1326,7 +1326,7 @@ export default function DashboardPage() {
                     return (
                       <div
                         key={category.name}
-                        className="flex items-center justify-between rounded-lg border px-3 py-2"
+                        className="flex items-center justify-between rounded-lg border px-3 py-2 max-[430px]:flex-col max-[430px]:items-start max-[430px]:gap-2"
                       >
                         <div>
                           <p className="text-sm font-medium">{category.name}</p>
@@ -1358,7 +1358,13 @@ export default function DashboardPage() {
       </div>
 
       {/* Floating Action Button - Now Upload */}
-      <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 md:bottom-8 md:right-8 z-40">
+      <div
+        className="fixed z-40 [--fab-bottom:1rem] [--fab-right:1rem] sm:[--fab-bottom:1.5rem] sm:[--fab-right:1.5rem] md:[--fab-bottom:2rem] md:[--fab-right:2rem] max-[430px]:[--fab-bottom:0.75rem] max-[430px]:[--fab-right:0.75rem]"
+        style={{
+          right: 'var(--fab-right)',
+          bottom: 'calc(var(--fab-bottom) + var(--safe-area-bottom))',
+        }}
+      >
         <input
           type="file"
           ref={fileInputRef}
@@ -1368,7 +1374,7 @@ export default function DashboardPage() {
         />
         <Button
           size="lg"
-          className="rounded-full h-12 w-12 sm:h-14 sm:w-14 shadow-lg"
+          className="rounded-full h-12 w-12 sm:h-14 sm:w-14 shadow-lg max-[430px]:h-11 max-[430px]:w-11"
           onClick={handleUploadClick}
           title="Upload Bank Statement (CSV)"
         >
@@ -1383,15 +1389,15 @@ export default function DashboardPage() {
             <DialogTitle>{editTitle}</DialogTitle>
             <DialogDescription>Update the value for this metric.</DialogDescription>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="value" className="text-right">
+          <div className="grid gap-4 py-4 max-[430px]:gap-3">
+            <div className="grid grid-cols-4 items-center gap-4 max-[430px]:grid-cols-1">
+              <Label htmlFor="value" className="text-right max-[430px]:text-left">
                 Value ($)
               </Label>
               <Input
                 id="value"
                 type="number"
-                className="col-span-3"
+                className="col-span-3 max-[430px]:col-span-1"
                 value={editValue}
                 onChange={(e) => setEditValue(e.target.value)}
                 autoFocus
@@ -1424,13 +1430,13 @@ export default function DashboardPage() {
               Need to teach a new rule? Pick a category once and we will remember it for future
               uploads.
             </p>
-            <div className="rounded-md border">
-              <Table>
+            <div className="rounded-md border overflow-x-auto">
+              <Table className="min-w-[520px] text-xs sm:text-sm">
                 <TableHeader>
                   <TableRow>
                     <TableHead>Transaction</TableHead>
-                    <TableHead className="w-32 text-right">Amount</TableHead>
-                    <TableHead className="w-48">Category</TableHead>
+                    <TableHead className="w-32 text-right max-[430px]:w-24">Amount</TableHead>
+                    <TableHead className="w-48 max-[430px]:w-36">Category</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -1514,7 +1520,7 @@ export default function DashboardPage() {
               {netWorthChartData.map((entry) => (
                 <div
                   key={entry.id}
-                  className="flex items-center justify-between rounded-lg border px-3 py-2 text-sm"
+                  className="flex items-center justify-between rounded-lg border px-3 py-2 text-sm max-[430px]:flex-col max-[430px]:items-start max-[430px]:gap-2 max-[430px]:text-xs"
                 >
                   <div>
                     <p className="font-medium">{entry.name}</p>
@@ -1534,7 +1540,7 @@ export default function DashboardPage() {
                 </div>
               ))}
               <div className="rounded-lg border bg-muted/50 px-3 py-2 text-sm font-medium">
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between max-[430px]:flex-col max-[430px]:items-start max-[430px]:gap-1">
                   <span>Total Net Worth</span>
                   <span>${netWorthTotal.toLocaleString()}</span>
                 </div>
