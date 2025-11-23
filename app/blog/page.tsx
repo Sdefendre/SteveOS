@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { ArrowRight, Play, Clock, Search, X } from 'lucide-react'
-import { SiteHeader } from '@/components/SiteHeader'
+import { MainHeader } from '@/components/MainHeader'
 import { BLOG_POSTS } from '@/constants/blog'
 import { createFadeInUp, viewportOnce } from '@/lib/motion'
 import { NewsletterSubscription } from '@/components/NewsletterSubscription'
@@ -45,7 +45,7 @@ export default function BlogPage() {
   return (
     <div className="min-h-screen bg-background text-foreground font-sans selection:bg-primary/20 relative">
       <SubtleThreeBackground />
-      <SiteHeader />
+      <MainHeader />
 
       <main className="container mx-auto px-4 sm:px-6 max-w-4xl py-12 sm:py-16 md:py-20">
         {/* Header */}

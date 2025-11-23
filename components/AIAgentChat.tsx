@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Textarea } from '@/components/ui/textarea'
@@ -262,131 +262,126 @@ export function AIAgentChat({ userId }: AIAgentChatProps) {
 
       {/* Messages Container */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        <AnimatePresence>
-          {messages.map((message) => (
-            <motion.div
-              key={message.id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className={`flex gap-3 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+        {messages.map((message) => (
+          <motion.div
+            key={message.id}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className={`flex gap-3 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+          >
+            {message.role === 'assistant' && (
+              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+                <Bot className="h-5 w-5 text-primary" />
+              </div>
+            )}
+            <Card
+              className={`max-w-[80%] ${
+                message.role === 'user'
+                  ? 'bg-primary/10 border-primary/20'
+                  : 'bg-muted/50 border-border'
+              }`}
             >
-              {message.role === 'assistant' && (
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
-                  <Bot className="h-5 w-5 text-primary" />
-                </div>
-              )}
-              <Card
-                className={`max-w-[80%] ${
-                  message.role === 'user'
-                    ? 'bg-primary/10 border-primary/20'
-                    : 'bg-muted/50 border-border'
-                }`}
-              >
-                <CardContent className="p-3">
-                  <div className="text-sm markdown-content">
-                    <ReactMarkdown
-                      remarkPlugins={[remarkGfm]}
-                      components={{
-                        h1: ({ node, ...props }) => (
-                          <h1 className="text-lg font-bold mt-4 mb-2 first:mt-0" {...props} />
-                        ),
-                        h2: ({ node, ...props }) => (
-                          <h2 className="text-base font-bold mt-3 mb-2 first:mt-0" {...props} />
-                        ),
-                        h3: ({ node, ...props }) => (
-                          <h3 className="text-sm font-semibold mt-3 mb-1.5 first:mt-0" {...props} />
-                        ),
-                        h4: ({ node, ...props }) => (
-                          <h4 className="text-sm font-semibold mt-2 mb-1 first:mt-0" {...props} />
-                        ),
-                        p: ({ node, ...props }) => (
-                          <p className="my-2 leading-relaxed first:mt-0 last:mb-0" {...props} />
-                        ),
-                        ul: ({ node, ...props }) => (
-                          <ul className="list-disc list-inside my-2 space-y-1 ml-2" {...props} />
-                        ),
-                        ol: ({ node, ...props }) => (
-                          <ol className="list-decimal list-inside my-2 space-y-1 ml-2" {...props} />
-                        ),
-                        li: ({ node, ...props }) => <li className="leading-relaxed" {...props} />,
-                        strong: ({ node, ...props }) => (
-                          <strong className="font-semibold" {...props} />
-                        ),
-                        em: ({ node, ...props }) => <em className="italic" {...props} />,
-                        code: ({ node, inline, className, children, ...props }: any) => {
-                          const match = /language-(\w+)/.exec(className || '')
-                          return !inline ? (
-                            <pre className="bg-muted p-2 rounded my-2 overflow-x-auto">
-                              <code className={className} {...props}>
-                                {children}
-                              </code>
-                            </pre>
-                          ) : (
-                            <code
-                              className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono"
-                              {...props}
-                            >
+              <CardContent className="p-3">
+                <div className="text-sm markdown-content">
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                    components={{
+                      h1: ({ node, ...props }) => (
+                        <h1 className="text-lg font-bold mt-4 mb-2 first:mt-0" {...props} />
+                      ),
+                      h2: ({ node, ...props }) => (
+                        <h2 className="text-base font-bold mt-3 mb-2 first:mt-0" {...props} />
+                      ),
+                      h3: ({ node, ...props }) => (
+                        <h3 className="text-sm font-semibold mt-3 mb-1.5 first:mt-0" {...props} />
+                      ),
+                      h4: ({ node, ...props }) => (
+                        <h4 className="text-sm font-semibold mt-2 mb-1 first:mt-0" {...props} />
+                      ),
+                      p: ({ node, ...props }) => (
+                        <p className="my-2 leading-relaxed first:mt-0 last:mb-0" {...props} />
+                      ),
+                      ul: ({ node, ...props }) => (
+                        <ul className="list-disc list-inside my-2 space-y-1 ml-2" {...props} />
+                      ),
+                      ol: ({ node, ...props }) => (
+                        <ol className="list-decimal list-inside my-2 space-y-1 ml-2" {...props} />
+                      ),
+                      li: ({ node, ...props }) => <li className="leading-relaxed" {...props} />,
+                      strong: ({ node, ...props }) => (
+                        <strong className="font-semibold" {...props} />
+                      ),
+                      em: ({ node, ...props }) => <em className="italic" {...props} />,
+                      code: ({ node, inline, className, children, ...props }: any) => {
+                        const match = /language-(\w+)/.exec(className || '')
+                        return !inline ? (
+                          <pre className="bg-muted p-2 rounded my-2 overflow-x-auto">
+                            <code className={className} {...props}>
                               {children}
                             </code>
-                          )
-                        },
-                        pre: ({ node, ...props }) => (
-                          <pre className="bg-muted p-2 rounded overflow-x-auto my-2" {...props} />
-                        ),
-                        a: ({ node, ...props }) => (
-                          <a
-                            className="text-primary underline hover:text-primary/80 transition-colors"
-                            target="_blank"
-                            rel="noopener noreferrer"
+                          </pre>
+                        ) : (
+                          <code
+                            className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono"
+                            {...props}
+                          >
+                            {children}
+                          </code>
+                        )
+                      },
+                      pre: ({ node, ...props }) => (
+                        <pre className="bg-muted p-2 rounded overflow-x-auto my-2" {...props} />
+                      ),
+                      a: ({ node, ...props }) => (
+                        <a
+                          className="text-primary underline hover:text-primary/80 transition-colors"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          {...props}
+                        />
+                      ),
+                      blockquote: ({ node, ...props }) => (
+                        <blockquote
+                          className="border-l-4 border-primary/30 pl-4 my-2 italic text-muted-foreground"
+                          {...props}
+                        />
+                      ),
+                      hr: ({ node, ...props }) => <hr className="my-4 border-border" {...props} />,
+                      table: ({ node, ...props }) => (
+                        <div className="overflow-x-auto my-2">
+                          <table
+                            className="min-w-full border-collapse border border-border"
                             {...props}
                           />
-                        ),
-                        blockquote: ({ node, ...props }) => (
-                          <blockquote
-                            className="border-l-4 border-primary/30 pl-4 my-2 italic text-muted-foreground"
-                            {...props}
-                          />
-                        ),
-                        hr: ({ node, ...props }) => (
-                          <hr className="my-4 border-border" {...props} />
-                        ),
-                        table: ({ node, ...props }) => (
-                          <div className="overflow-x-auto my-2">
-                            <table
-                              className="min-w-full border-collapse border border-border"
-                              {...props}
-                            />
-                          </div>
-                        ),
-                        thead: ({ node, ...props }) => <thead className="bg-muted" {...props} />,
-                        th: ({ node, ...props }) => (
-                          <th
-                            className="border border-border px-3 py-2 text-left font-semibold"
-                            {...props}
-                          />
-                        ),
-                        td: ({ node, ...props }) => (
-                          <td className="border border-border px-3 py-2" {...props} />
-                        ),
-                      }}
-                    >
-                      {message.parts
-                        ?.filter((part) => part.type === 'text')
-                        .map((part) => ('text' in part ? part.text : ''))
-                        .join('')}
-                    </ReactMarkdown>
-                  </div>
-                </CardContent>
-              </Card>
-              {message.role === 'user' && (
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
-                  <User className="h-5 w-5 text-primary" />
+                        </div>
+                      ),
+                      thead: ({ node, ...props }) => <thead className="bg-muted" {...props} />,
+                      th: ({ node, ...props }) => (
+                        <th
+                          className="border border-border px-3 py-2 text-left font-semibold"
+                          {...props}
+                        />
+                      ),
+                      td: ({ node, ...props }) => (
+                        <td className="border border-border px-3 py-2" {...props} />
+                      ),
+                    }}
+                  >
+                    {message.parts
+                      ?.filter((part) => part.type === 'text')
+                      .map((part) => ('text' in part ? part.text : ''))
+                      .join('')}
+                  </ReactMarkdown>
                 </div>
-              )}
-            </motion.div>
-          ))}
-        </AnimatePresence>
+              </CardContent>
+            </Card>
+            {message.role === 'user' && (
+              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+                <User className="h-5 w-5 text-primary" />
+              </div>
+            )}
+          </motion.div>
+        ))}
         {isLoading && (
           <motion.div
             initial={{ opacity: 0 }}

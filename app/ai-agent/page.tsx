@@ -1,4 +1,4 @@
-import { SiteHeader } from '@/components/SiteHeader'
+import { MainHeader } from '@/components/MainHeader'
 import { LandingFooter } from '@/components/landing/LandingFooter'
 import { AIAgentChat } from '@/components/AIAgentChat'
 import { VoiceAgent } from '@/components/VoiceAgent'
@@ -16,7 +16,7 @@ export default function AIAgentPage() {
   return (
     <div className="min-h-screen bg-background flex flex-col relative">
       <SubtleThreeBackgroundWrapper />
-      <SiteHeader />
+      <MainHeader />
 
       <main className="flex-1 container mx-auto px-3 sm:px-4 py-8 sm:py-12 max-w-6xl">
         <div className="max-w-3xl mx-auto mb-8">

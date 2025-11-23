@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { Mail, Linkedin, Github } from 'lucide-react'
-import { SiteHeader } from '@/components/SiteHeader'
+import { MainHeader } from '@/components/MainHeader'
 import { SITE } from '@/constants/site'
 import dynamic from 'next/dynamic'
 
@@ -19,7 +19,7 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-background text-foreground font-sans selection:bg-primary/20 relative">
       <SubtleThreeBackground />
-      <SiteHeader />
+      <MainHeader />
 
       <main className="container mx-auto px-3 sm:px-4 max-w-3xl py-12 sm:py-16 md:py-20">
         <motion.div

@@ -57,18 +57,22 @@ export function LandingCTA() {
             <Link href="/dashboard">
               <Button
                 size="lg"
-                className="text-lg px-8 py-6 h-auto rounded-full shadow-lg shadow-primary/20 hover:shadow-primary/30 hover:scale-105 active:scale-95 transition-all duration-150 group relative overflow-hidden text-primary-foreground font-semibold"
+                className="text-lg px-8 py-6 h-auto rounded-full shadow-lg shadow-primary/20 hover:shadow-primary/30 hover:scale-105 active:scale-95 transition-all duration-150 group relative overflow-hidden text-white font-bold bg-primary hover:bg-primary/90"
               >
-                <span className="relative z-10 flex items-center">
-                  Deploy System
-                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </span>
+                {/* Gradient Overlay - Placed before text to ensure z-index stacking is correct */}
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-primary/20 to-transparent"
+                  className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent pointer-events-none"
                   initial={{ x: '-100%' }}
                   whileHover={{ x: '100%' }}
                   transition={{ duration: 0.3 }}
                 />
+                <span
+                  className="relative z-10 flex items-center"
+                  style={{ WebkitTextFillColor: 'initial' }}
+                >
+                  Deploy System
+                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </span>
               </Button>
             </Link>
 
@@ -76,10 +80,15 @@ export function LandingCTA() {
               <Button
                 size="lg"
                 variant="outline"
-                className="text-lg px-8 py-6 h-auto rounded-full glass hover:bg-white/20 dark:hover:bg-black/20 hover:scale-105 active:scale-95 transition-all duration-150 border-2 border-primary/50 hover:border-primary group text-foreground font-semibold bg-background/80 dark:bg-background/60"
+                className="text-lg px-8 py-6 h-auto rounded-full hover:bg-accent/10 hover:scale-105 active:scale-95 transition-all duration-150 border-2 border-primary/50 hover:border-primary group text-primary dark:text-white font-bold bg-background/80 backdrop-blur-sm"
               >
-                <BookOpen className="mr-2 w-5 h-5 group-hover:rotate-6 transition-transform" />
-                Access Documentation
+                <BookOpen className="mr-2 w-5 h-5 group-hover:rotate-6 transition-transform text-primary dark:text-white" />
+                <span
+                  className="text-primary dark:text-white group-hover:text-primary transition-colors"
+                  style={{ WebkitTextFillColor: 'initial' }}
+                >
+                  Access Documentation
+                </span>
               </Button>
             </Link>
           </div>

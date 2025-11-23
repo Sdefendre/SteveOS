@@ -175,11 +175,14 @@ export function LandingHero() {
               <Link href="/ai-agent" className="w-full sm:w-auto">
                 <Button
                   size="lg"
-                  className="w-full sm:w-auto text-lg px-10 py-7 rounded-full shadow-xl shadow-primary/30 hover:shadow-primary/50 hover:scale-105 active:scale-95 transition-all duration-150 bg-primary border-0 group font-semibold relative overflow-hidden text-white dark:text-primary-foreground"
+                  className="w-full sm:w-auto text-lg px-10 py-7 rounded-full shadow-xl shadow-primary/30 hover:shadow-primary/50 hover:scale-105 active:scale-95 transition-all duration-150 bg-primary border-0 group font-semibold relative overflow-hidden text-white"
                 >
-                  <span className="relative z-10 flex items-center font-semibold text-white dark:text-primary-foreground">
+                  <span
+                    className="relative z-10 flex items-center font-semibold text-white"
+                    style={{ WebkitTextFillColor: 'initial' }}
+                  >
                     Start Learning Free
-                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform text-white dark:text-primary-foreground" />
+                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform text-white" />
                   </span>
                   <span className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-300" />
                 </Button>
@@ -188,9 +191,14 @@ export function LandingHero() {
                 <Button
                   variant="outline"
                   size="lg"
-                  className="w-full sm:w-auto text-lg px-10 py-7 rounded-full border-2 border-primary/70 hover:border-primary hover:bg-primary/10 dark:hover:bg-primary/20 hover:scale-105 active:scale-95 transition-all duration-150 font-semibold backdrop-blur-sm bg-background/95 dark:bg-background/80 text-foreground"
+                  className="w-full sm:w-auto text-lg px-10 py-7 rounded-full border-2 border-primary/70 hover:border-primary hover:bg-primary/10 dark:hover:bg-primary/20 hover:scale-105 active:scale-95 transition-all duration-150 font-semibold backdrop-blur-sm bg-background/95 dark:bg-background/80 text-primary dark:text-white"
                 >
-                  <span className="text-foreground font-semibold">See How It Works</span>
+                  <span
+                    className="text-primary dark:text-white font-semibold"
+                    style={{ WebkitTextFillColor: 'initial' }}
+                  >
+                    See How It Works
+                  </span>
                 </Button>
               </Link>
             </motion.div>

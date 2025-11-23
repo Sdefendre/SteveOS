@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Mic, MicOff, Loader2, AlertCircle } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 
 interface VoiceAgentProps {
@@ -218,19 +218,16 @@ Remember: You're built by veterans, for veterans. Speak their language and under
           </div>
 
           {/* Listening Indicator */}
-          <AnimatePresence>
-            {isListening && status === 'connected' && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="flex items-center gap-2 text-sm text-muted-foreground"
-              >
-                <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
-                <span>Listening...</span>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {isListening && status === 'connected' && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex items-center gap-2 text-sm text-muted-foreground"
+            >
+              <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
+              <span>Listening...</span>
+            </motion.div>
+          )}
 
           {/* Mute Toggle */}
           {status === 'connected' && (

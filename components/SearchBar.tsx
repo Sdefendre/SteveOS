@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react'
 import { Search, X } from 'lucide-react'
 import { Input } from '@/components/ui/input'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 
 interface SearchBarProps<T> {
   items: T[]
@@ -71,30 +71,24 @@ export function SearchBar<T extends Record<string, any>>({
         </div>
       )}
 
-      <AnimatePresence mode="wait">
-        {filteredItems.length > 0 ? (
-          <motion.div
-            key="results"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className={containerClassName}
-          >
-            {filteredItems.map((item, index) => renderItem(item, index))}
-          </motion.div>
-        ) : searchQuery ? (
-          <motion.div
-            key="empty"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="text-center py-12 text-muted-foreground"
-          >
-            {emptyMessage}
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
+      {filteredItems.length > 0 ? (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.2 }}
+          className={containerClassName}
+        >
+          {filteredItems.map((item, index) => renderItem(item, index))}
+        </motion.div>
+      ) : searchQuery ? (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-center py-12 text-muted-foreground"
+        >
+          {emptyMessage}
+        </motion.div>
+      ) : null}
     </div>
   )
 }

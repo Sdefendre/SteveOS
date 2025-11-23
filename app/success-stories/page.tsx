@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { ExternalLink, Github, ArrowRight } from 'lucide-react'
-import { SiteHeader } from '@/components/SiteHeader'
+import { MainHeader } from '@/components/MainHeader'
 import { PROJECTS } from '@/constants/projects'
 import { createFadeInUp, viewportOnce } from '@/lib/motion'
 import dynamic from 'next/dynamic'
@@ -21,7 +21,7 @@ export default function SuccessStoriesPage() {
   return (
     <div className="min-h-screen bg-background text-foreground font-sans selection:bg-primary/20 relative">
       <SubtleThreeBackground />
-      <SiteHeader />
+      <MainHeader />
 
       <main className="container mx-auto px-4 max-w-5xl py-20">
         <div className="max-w-2xl mb-16">

@@ -1,4 +1,4 @@
-import { SiteHeader } from '@/components/SiteHeader'
+import { MainHeader } from '@/components/MainHeader'
 import { LandingHero } from '@/components/landing/LandingHero'
 import dynamic from 'next/dynamic'
 
@@ -38,7 +38,7 @@ export default function SaaSLanding() {
   return (
     <div className="min-h-screen text-foreground font-sans selection:bg-primary/20 overflow-x-hidden relative w-full max-w-full">
       <div className="relative z-10 w-full max-w-full">
-        <SiteHeader />
+        <MainHeader />
 
         <main className="relative z-10 w-full max-w-full overflow-x-hidden">
           <LandingHero />
