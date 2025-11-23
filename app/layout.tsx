@@ -52,13 +52,6 @@ export const metadata: Metadata = {
     telephone: false,
   },
   metadataBase: new URL('https://steve-os.vercel.app'),
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 5,
-    userScalable: true,
-    viewportFit: 'cover',
-  },
   alternates: {
     canonical: '/',
     types: {
@@ -108,6 +101,14 @@ export const metadata: Metadata = {
     icon: '/logo.png',
     apple: '/logo.png',
   },
+}
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  viewportFit: 'cover',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

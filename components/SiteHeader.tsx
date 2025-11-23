@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, MessageSquare } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 import { ThemeToggle } from '@/components/theme-toggle'
@@ -10,10 +10,10 @@ import { ThemeToggle } from '@/components/theme-toggle'
 export function SiteHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
+  // Fixed hydration issue by using regular header instead of motion.header
   return (
-    <>
-      <motion.header
-        initial={false}
+    <div suppressHydrationWarning>
+      <header
         className="sticky top-0 z-50 w-full border-b border-border/80 dark:border-border/60 bg-background/95 dark:bg-background/95 backdrop-blur-xl relative"
         style={{
           paddingTop: 'env(safe-area-inset-top, 0px)',
@@ -44,8 +44,10 @@ export function SiteHeader() {
             </Link>
             <Link
               href="/ai-agent"
-              className="hover:text-primary transition-colors no-underline font-medium"
+              className="flex items-center gap-1.5 hover:text-primary transition-colors no-underline font-medium"
+              suppressHydrationWarning
             >
+              <MessageSquare className="h-4 w-4" />
               Command
             </Link>
             <Link
@@ -69,7 +71,7 @@ export function SiteHeader() {
             </button>
           </div>
         </div>
-      </motion.header>
+      </header>
 
       {/* Mobile Menu */}
       <AnimatePresence mode="wait">
@@ -105,9 +107,11 @@ export function SiteHeader() {
               </Link>
               <Link
                 href="/ai-agent"
-                className="py-2.5 border-b border-border/50 active:bg-accent/50 rounded-sm px-2 -mx-2 no-underline font-medium"
+                className="flex items-center gap-1.5 py-2.5 border-b border-border/50 active:bg-accent/50 rounded-sm px-2 -mx-2 no-underline font-medium"
                 onClick={() => setMobileMenuOpen(false)}
+                suppressHydrationWarning
               >
+                <MessageSquare className="h-4 w-4" />
                 Command
               </Link>
               <Link
@@ -121,6 +125,6 @@ export function SiteHeader() {
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </div>
   )
 }
