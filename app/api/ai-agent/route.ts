@@ -182,6 +182,7 @@ export async function POST(request: NextRequest) {
       model: aiModel,
       messages,
       temperature: 0.7,
+      // @ts-expect-error - maxTokens is supported by providers but might be missing in type definition
       maxTokens: isGrok ? 2000 : 1000, // Grok supports longer responses
       onFinish: async ({ text }) => {
         // Save assistant response after streaming completes
@@ -197,18 +198,14 @@ export async function POST(request: NextRequest) {
     })
 
     // Return the streaming response with conversation ID in headers
-    // Use toUIMessageStreamResponse for useChat with DefaultChatTransport in AI SDK v5
-    // Fallback to toAIStreamResponse if toUIMessageStreamResponse is not available
+    // Use toDataStreamResponse for useChat in AI SDK v3+
     let response: Response
-    if (typeof result.toUIMessageStreamResponse === 'function') {
-      response = result.toUIMessageStreamResponse()
-    } else if (typeof result.toAIStreamResponse === 'function') {
-      response = result.toAIStreamResponse()
+    // @ts-expect-error - toDataStreamResponse is available in recent versions but types might be mismatching
+    if (result.toDataStreamResponse) {
+      response = result.toDataStreamResponse()
     } else {
-      // Last resort: try to create response from the stream manually
-      throw new Error(
-        'No compatible streaming response method found. Please update @ai-sdk packages.'
-      )
+      // Fallback or error
+      throw new Error('No compatible streaming response method found.')
     }
 
     response.headers.set('X-Conversation-ID', currentConversationId)

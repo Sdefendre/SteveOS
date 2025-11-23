@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import Link from 'next/link'
 import { useChat } from '@ai-sdk/react'
 import { DefaultChatTransport } from 'ai'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -19,6 +20,7 @@ import {
   Menu,
   Loader2,
   Terminal,
+  Home,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
@@ -214,6 +216,17 @@ export function CommandChat({ userId }: CommandChatProps) {
         {/* Header */}
         <header className="flex items-center justify-between p-4 border-b border-border/50 bg-background/60 backdrop-blur-md z-10 sticky top-0">
           <div className="flex items-center gap-3">
+            <Link href="/">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors"
+                title="Back to Home"
+              >
+                <Home className="h-5 w-5" />
+              </Button>
+            </Link>
+
             <Button
               variant="ghost"
               size="icon"
@@ -316,7 +329,7 @@ export function CommandChat({ userId }: CommandChatProps) {
                   >
                     <Sparkles className="h-10 w-10 text-primary" />
                   </motion.div>
-                  <h2 className="text-3xl font-bold mb-3 tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-white/70">
+                  <h2 className="text-3xl font-bold mb-3 tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
                     Command Interface Online
                   </h2>
                   <p className="text-lg text-muted-foreground max-w-md mb-10 leading-relaxed">
@@ -401,7 +414,7 @@ export function CommandChat({ userId }: CommandChatProps) {
                   <Button
                     type="submit"
                     size="icon"
-                    disabled={!(input || '').trim() || isLoading}
+                    disabled={!input || typeof input !== 'string' || !input.trim() || isLoading}
                     className="h-10 w-10 rounded-xl mb-1 shrink-0 bg-primary hover:bg-primary/90 transition-all shadow-lg hover:shadow-primary/25"
                   >
                     {isLoading ? (

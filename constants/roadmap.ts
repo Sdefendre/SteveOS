@@ -16,9 +16,9 @@ export const ROADMAP_ITEMS: RoadmapItem[] = [
   // Phase 1: Financial Clarity Foundation
   {
     id: 'financial-dashboard',
-    title: 'Financial Dashboard',
+    title: 'Financial BattleStation',
     description:
-      'Core financial dashboard providing clarity on where you are financially - balances, transactions, and net worth tracking.',
+      'Core financial BattleStation providing clarity on where you are financially - balances, transactions, and net worth tracking.',
     priority: 'high',
     complexity: 'medium',
     status: 'completed',

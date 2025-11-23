@@ -9,7 +9,7 @@ import { UpcomingBills } from '@/components/dashboard/upcoming-bills'
 import { TransactionImport } from '@/components/dashboard/transaction-import'
 import { CalendarWidget } from '@/components/dashboard/calendar-widget'
 
-export default function DashboardPage() {
+export default function BattleStationPage() {
   const { isLoading } = useDashboard()
 
   if (isLoading) {

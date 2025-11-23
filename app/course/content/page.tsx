@@ -16,9 +16,9 @@ export const metadata = {
 }
 
 interface CourseContentPageProps {
-  searchParams: {
+  searchParams: Promise<{
     session_id?: string
-  }
+  }>
 }
 
 export default async function CourseContentPage({

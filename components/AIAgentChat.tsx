@@ -170,7 +170,7 @@ export function AIAgentChat({ userId }: AIAgentChatProps) {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!input.trim() || isLoading) return
+    if (!input || !input.trim() || isLoading) return
 
     const userMessage = input.trim()
     setInput('')
@@ -318,7 +318,7 @@ export function AIAgentChat({ userId }: AIAgentChatProps) {
           />
           <Button
             type="submit"
-            disabled={!input.trim() || isLoading}
+            disabled={!input || !input.trim() || isLoading}
             size="lg"
             className="shrink-0"
           >

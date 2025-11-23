@@ -1,7 +1,7 @@
 'use client'
 
 import { forwardRef } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { MessageCircle } from 'lucide-react'
 import { motion, type HTMLMotionProps } from 'framer-motion'
 
@@ -34,6 +34,13 @@ const ChatButton = forwardRef<HTMLButtonElement, HTMLMotionProps<'button'>>(
 ChatButton.displayName = 'ChatButton'
 
 export function ChatFloatingButton() {
+  const pathname = usePathname()
+
+  // Don't show the floating button on the command page since it's the chat interface
+  if (pathname === '/command') {
+    return null
+  }
+
   return (
     <motion.div
       initial={{ scale: 0.8, opacity: 0 }}
@@ -41,8 +48,8 @@ export function ChatFloatingButton() {
       transition={{ duration: 0.2 }}
       className="fixed z-50 print:hidden"
       style={{
-        bottom: 'max(1rem, env(safe-area-inset-bottom) + 1rem)',
-        right: 'max(1rem, env(safe-area-inset-right) + 1rem)',
+        bottom: 'max(1rem, calc(env(safe-area-inset-bottom) + 1rem))',
+        right: 'max(1rem, calc(env(safe-area-inset-right) + 1rem))',
       }}
     >
       <ChatButton />

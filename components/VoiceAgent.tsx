@@ -102,7 +102,7 @@ Remember: You're built by veterans, for veterans. Speak their language and under
 
       // Connect to the session
       await session.connect({
-        apiKey: sessionToken, // Use the session token from our API
+        apiKey: sessionToken, // Use the ephemeral session token from our API
       })
 
       sessionRef.current = session

@@ -1,10 +1,8 @@
-import { NextRequest } from 'next/server'
-
 /**
  * API route to create a session token for OpenAI Voice Agent
  * This route securely handles the API key on the server side
  */
-export async function POST(_request: NextRequest) {
+export async function POST() {
   try {
     // const body = await request.json()
     // const { userId } = body
@@ -34,12 +32,37 @@ export async function POST(_request: NextRequest) {
     //   )
     // }
 
-    // Return the API key as a session token
-    // Note: In production, you might want to use a more secure approach
-    // like generating a temporary token that expires after a certain time
+    // Create a new ephemeral session with OpenAI
+    const response = await fetch('https://api.openai.com/v1/realtime/sessions', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o-realtime-preview-2024-12-17',
+        voice: 'verse',
+      }),
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      console.error('OpenAI Session Error:', errorData)
+      return new Response(
+        JSON.stringify({
+          error: 'Failed to create session',
+          message: errorData.error?.message || 'Failed to create voice agent session',
+        }),
+        { status: response.status, headers: { 'Content-Type': 'application/json' } }
+      )
+    }
+
+    const data = await response.json()
+
+    // Return the ephemeral client secret as the session token
     return new Response(
       JSON.stringify({
-        sessionToken: apiKey,
+        sessionToken: data.client_secret.value,
       }),
       {
         status: 200,
