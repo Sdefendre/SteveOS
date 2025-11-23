@@ -35,7 +35,7 @@ export default function BattleStationPage() {
 
   return (
     <div className="flex-1 space-y-4">
-      <div className="mb-2">
+      <div className="mb-2 text-center sm:text-left">
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">BattleStation</h1>
         <p className="text-sm text-muted-foreground mt-1">Your financial command center</p>
       </div>

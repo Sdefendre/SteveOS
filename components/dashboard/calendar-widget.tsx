@@ -31,7 +31,7 @@ export function CalendarWidget() {
   }, [])
 
   return (
-    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
+    <div className="flex flex-col sm:flex-row items-center sm:items-center justify-center sm:justify-between gap-3 sm:gap-4 mb-4 sm:mb-6 text-center sm:text-left">
       <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
         {dateData.month || <div className="h-8 w-40 bg-muted animate-pulse rounded-md" />}
       </h1>
