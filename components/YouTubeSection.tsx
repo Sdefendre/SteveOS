@@ -105,7 +105,7 @@ export function YouTubeSection() {
               href={SITE.youtube}
               target="_blank"
               rel="noopener noreferrer"
-              className="block group relative aspect-video bg-black rounded-xl sm:rounded-2xl overflow-hidden border-2 border-border shadow-2xl hover:shadow-red-600/20 transition-all duration-300"
+              className="block group relative aspect-video bg-black rounded-xl sm:rounded-2xl overflow-hidden border-2 border-border shadow-2xl hover:shadow-red-600/20 transition-all duration-200"
             >
               {/* Enhanced Background Gradient */}
               <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900" />
@@ -113,7 +113,7 @@ export function YouTubeSection() {
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,_var(--tw-gradient-stops))] from-red-600/10 via-transparent to-transparent" />
 
               {/* Animated Grid Pattern */}
-              <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:32px_32px] opacity-50 group-hover:opacity-75 transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:32px_32px] opacity-50 group-hover:opacity-75 transition-opacity duration-200" />
 
               {/* Glowing Play Button */}
               <div className="absolute inset-0 flex items-center justify-center">
@@ -148,7 +148,7 @@ export function YouTubeSection() {
               </div>
 
               {/* Hover overlay effect */}
-              <div className="absolute inset-0 bg-red-600/0 group-hover:bg-red-600/5 transition-colors duration-300" />
+              <div className="absolute inset-0 bg-red-600/0 group-hover:bg-red-600/5 transition-colors duration-200" />
             </a>
           </motion.div>
         </div>

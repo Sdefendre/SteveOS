@@ -105,7 +105,7 @@ export function NewsletterSubscription() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email address"
-              className="w-full px-6 py-4 bg-background border border-input rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-300"
+              className="w-full px-6 py-4 bg-background border border-input rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200"
               disabled={status === 'loading'}
               aria-label="Email address for newsletter subscription"
               aria-invalid={status === 'error'}
@@ -113,11 +113,11 @@ export function NewsletterSubscription() {
           </div>
 
           <div className="relative group">
-            <div className="absolute inset-0 bg-gradient-to-r from-[#657832] to-[#785a3c] rounded-xl blur opacity-20 group-hover:opacity-30 transition-opacity duration-300" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#657832] to-[#785a3c] rounded-xl blur opacity-20 group-hover:opacity-30 transition-opacity duration-200" />
             <button
               type="submit"
               disabled={status === 'loading' || status === 'success'}
-              className={`relative w-full px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 flex items-center justify-center gap-3 overflow-hidden ${
+              className={`relative w-full px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-200 flex items-center justify-center gap-3 overflow-hidden ${
                 status === 'success'
                   ? 'bg-green-600 text-white cursor-default shadow-lg shadow-green-500/25'
                   : status === 'error'

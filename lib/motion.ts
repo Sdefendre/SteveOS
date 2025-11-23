@@ -27,6 +27,5 @@ export const hoverScaleProps = (reduced: boolean, scale = 1.02) =>
     : {
         whileHover: { scale },
         whileTap: { scale: Math.max(0.96, scale - 0.04) },
-        transition: { duration: 0.2 },
+        transition: { type: 'spring', stiffness: 400, damping: 25 },
       }
-

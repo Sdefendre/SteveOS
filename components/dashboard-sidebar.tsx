@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import { LayoutDashboard, Home, Settings } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { DASHBOARD_NAV_ITEMS } from '@/constants/navigation'
+import { Logo } from '@/components/Logo'
 
 export function DashboardSidebar() {
   const pathname = usePathname()
@@ -12,16 +13,16 @@ export function DashboardSidebar() {
   return (
     <aside className="hidden border-r bg-card/50 backdrop-blur-xl md:flex md:flex-col h-full">
       <div className="flex h-14 items-center border-b px-6 lg:h-[60px]">
-        <Link
-          className="flex items-center gap-2 font-bold text-lg tracking-tight"
-          href="/dashboard"
-        >
-          <div className="h-6 w-6 rounded-lg bg-primary flex items-center justify-center text-primary-foreground">
-            <LayoutDashboard className="h-4 w-4" />
-          </div>
-          <span>
-            LifeCommand<span className="font-normal text-muted-foreground"> Finance</span>
-          </span>
+        <Link className="no-underline" href="/dashboard">
+          <Logo
+            size="md"
+            icon={<LayoutDashboard className="w-full h-full" />}
+            textSuffix={
+              <span className="font-normal text-muted-foreground text-[0.6em] ml-1 uppercase tracking-wider">
+                Finance
+              </span>
+            }
+          />
         </Link>
       </div>
       <div className="flex-1 overflow-auto py-4">

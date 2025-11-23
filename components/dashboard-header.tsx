@@ -19,6 +19,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { DASHBOARD_NAV_ITEMS } from '@/constants/navigation'
+import { Logo } from '@/components/Logo'
 
 export function DashboardHeader() {
   const pathname = usePathname()
@@ -39,13 +40,16 @@ export function DashboardHeader() {
         </SheetTrigger>
         <SheetContent side="left" className="flex flex-col w-[300px] sm:w-[300px] p-0">
           <div className="flex h-14 items-center border-b px-6">
-            <Link className="flex items-center gap-2 font-bold text-lg" href="/dashboard">
-              <div className="h-6 w-6 rounded-lg bg-primary flex items-center justify-center text-primary-foreground">
-                <LayoutDashboard className="h-4 w-4" />
-              </div>
-              <span>
-                LifeCommand<span className="font-normal text-muted-foreground"> Finance</span>
-              </span>
+            <Link className="no-underline" href="/dashboard">
+              <Logo
+                size="md"
+                icon={<LayoutDashboard className="w-full h-full" />}
+                textSuffix={
+                  <span className="font-normal text-muted-foreground text-[0.6em] ml-1 uppercase tracking-wider">
+                    Finance
+                  </span>
+                }
+              />
             </Link>
           </div>
           <div className="flex-1 overflow-auto py-4 px-4">
@@ -105,7 +109,6 @@ export function DashboardHeader() {
         </form>
       </div>
       <div className="flex items-center gap-1 sm:gap-2">
-        <FeedbackDialog path={pathname} />
         <ThemeToggle />
         <Button variant="ghost" size="icon" className="h-9 w-9 relative hidden sm:flex">
           <Bell className="h-4 w-4" />

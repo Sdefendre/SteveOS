@@ -11,6 +11,7 @@ import { NewsletterSubscription } from '@/components/NewsletterSubscription'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import dynamic from 'next/dynamic'
+import type { BlogPost } from '@/lib/types/blog'
 
 // Lazy load Three.js background to improve initial render
 const SubtleThreeBackground = dynamic(
@@ -24,7 +25,7 @@ const SubtleThreeBackground = dynamic(
 export default function BlogPage() {
   const [searchQuery, setSearchQuery] = useState('')
 
-  const sortedPosts = [...BLOG_POSTS].sort(
+  const sortedPosts = ([...BLOG_POSTS] as BlogPost[]).sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   )
 
@@ -103,13 +104,12 @@ export default function BlogPage() {
               transition={{ delay: index * 0.05 }}
             >
               <Link href={`/blog/${post.id}`}>
-                <Card className="group border hover:border-primary/50 transition-all duration-300 hover:shadow-md cursor-pointer">
+                <Card className="group border hover:border-primary/50 transition-all duration-200 hover:shadow-md cursor-pointer">
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between gap-4 mb-3">
                       <h2 className="text-xl sm:text-2xl font-bold group-hover:text-primary-gradient transition-colors flex-1">
                         {post.title}
                       </h2>
-                      {/* @ts-expect-error - youtubeId is optional in blog post type */}
                       {post.youtubeId && (
                         <div className="flex items-center justify-center w-8 h-8 rounded-full bg-red-500/10 text-red-600 shrink-0">
                           <Play size={14} fill="currentColor" />

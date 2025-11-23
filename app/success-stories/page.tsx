@@ -39,7 +39,7 @@ export default function SuccessStoriesPage() {
               initial="initial"
               whileInView="animate"
               viewport={viewportOnce}
-              className="group border border-border rounded-xl p-8 transition-all duration-300 hover:shadow-lg hover:border-primary/50 hover:bg-accent/10"
+              className="group border border-border rounded-xl p-8 transition-all duration-200 hover:shadow-lg hover:border-primary/50 hover:bg-accent/10"
               whileHover={{ y: -5 }}
             >
               <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">

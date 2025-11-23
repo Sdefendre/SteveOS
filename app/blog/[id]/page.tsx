@@ -11,12 +11,13 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { SubtleThreeBackgroundWrapper } from '@/components/SubtleThreeBackgroundWrapper'
+import type { BlogPost } from '@/lib/types/blog'
 
 type Params = Promise<{ id: string }>
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { id } = await params
-  const post = BLOG_POSTS.find((p) => p.id === id)
+  const post = (BLOG_POSTS as BlogPost[]).find((p) => p.id === id)
   if (!post) return { title: 'Post not found' }
   const title = post.title
   const description = post.excerpt
@@ -47,7 +48,9 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 
 export default async function BlogPostPage({ params }: { params: Params }) {
   const { id } = await params
-  const post = BLOG_POSTS.find((p) => p.id === id)
+  const posts = BLOG_POSTS as BlogPost[]
+  const post = posts.find((p) => p.id === id)
+
   if (!post) {
     return (
       <main className="min-h-screen bg-background text-foreground p-6">
@@ -62,9 +65,9 @@ export default async function BlogPostPage({ params }: { params: Params }) {
   }
 
   // Get related posts (same tags, excluding current post)
-  const relatedPosts = BLOG_POSTS.filter(
-    (p) => p.id !== post.id && p.tags?.some((tag) => post.tags?.includes(tag))
-  ).slice(0, 3)
+  const relatedPosts = posts
+    .filter((p) => p.id !== post.id && p.tags?.some((tag) => post.tags?.includes(tag)))
+    .slice(0, 3)
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -142,14 +145,9 @@ export default async function BlogPostPage({ params }: { params: Params }) {
             </header>
 
             {/* YouTube Embed */}
-            {/* @ts-expect-error - YouTubeId is optional */}
             {post.youtubeId && (
               <div className="mb-8 md:mb-12 rounded-xl overflow-hidden border border-border shadow-lg">
-                <YouTubeEmbed
-                  // @ts-expect-error - youtubeId is optional in blog post type
-                  videoId={post.youtubeId}
-                  title={post.title}
-                />
+                <YouTubeEmbed videoId={post.youtubeId} title={post.title} />
               </div>
             )}
 
@@ -185,7 +183,7 @@ export default async function BlogPostPage({ params }: { params: Params }) {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {relatedPosts.map((relatedPost) => (
                     <Link key={relatedPost.id} href={`/blog/${relatedPost.id}`}>
-                      <Card className="group h-full border hover:border-primary/50 transition-all duration-300 hover:shadow-lg cursor-pointer">
+                      <Card className="group h-full border hover:border-primary/50 transition-all duration-150 hover:shadow-lg cursor-pointer">
                         <div className="p-6 flex flex-col h-full">
                           <h3 className="text-lg font-bold mb-2 group-hover:text-primary-gradient transition-colors line-clamp-2">
                             {relatedPost.title}

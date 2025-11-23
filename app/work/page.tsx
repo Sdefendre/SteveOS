@@ -50,7 +50,7 @@ export default function WorkPage() {
                 initial="initial"
                 whileInView="animate"
                 viewport={viewportOnce}
-                className="group border border-border rounded-xl p-5 sm:p-6 md:p-8 transition-all duration-300 hover:shadow-lg hover:border-primary/50 hover:bg-accent/10 cursor-pointer"
+                className="group border border-border rounded-xl p-5 sm:p-6 md:p-8 transition-all duration-200 hover:shadow-lg hover:border-primary/50 hover:bg-accent/10 cursor-pointer"
                 whileHover={{ y: -5 }}
               >
                 <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 sm:gap-6">

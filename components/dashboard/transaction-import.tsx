@@ -96,7 +96,7 @@ export function TransactionImport() {
       />
       <Button
         size="lg"
-        className="fixed bottom-6 right-6 rounded-full h-14 w-14 shadow-xl z-40 animate-in fade-in zoom-in duration-300"
+        className="fixed bottom-6 right-6 rounded-full h-14 w-14 shadow-xl z-40 animate-in fade-in zoom-in duration-200"
         onClick={handleUploadClick}
         title="Upload Bank Statement (CSV)"
       >
