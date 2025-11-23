@@ -104,7 +104,7 @@ export default function BlogPage() {
               transition={{ delay: index * 0.05 }}
             >
               <Link href={`/blog/${post.id}`}>
-                <Card className="group border hover:border-primary/50 transition-all duration-200 hover:shadow-md cursor-pointer">
+                <Card className="group border ring-1 ring-border/70 bg-card/95 supports-[backdrop-filter]:bg-card/80 backdrop-blur-xl hover:border-primary/50 transition-all duration-200 hover:shadow-lg cursor-pointer">
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between gap-4 mb-3">
                       <h2 className="text-xl sm:text-2xl font-bold group-hover:text-primary-gradient transition-colors flex-1">
@@ -116,7 +116,7 @@ export default function BlogPage() {
                         </div>
                       )}
                     </div>
-                    <p className="text-muted-foreground mb-4 leading-relaxed line-clamp-2">
+                    <p className="text-foreground/90 mb-4 leading-relaxed line-clamp-2">
                       {post.excerpt}
                     </p>
                     <div className="flex items-center justify-between">
