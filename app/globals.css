@@ -234,6 +234,46 @@
     line-height: 1.6;
     letter-spacing: 0;
   }
+  /* Improve table readability */
+  table {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
+  th {
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+  td {
+    letter-spacing: 0.01em;
+  }
+  /* Responsive font size adjustments */
+  @media (max-width: 640px) {
+    html {
+      font-size: 16px; /* Slightly smaller on mobile for better fit */
+    }
+    h1 {
+      font-size: 2rem; /* Ensure headings scale properly */
+    }
+    h2 {
+      font-size: 1.75rem;
+    }
+    h3 {
+      font-size: 1.5rem;
+    }
+  }
+  /* Improve button text readability */
+  button {
+    letter-spacing: 0.01em;
+    font-weight: 500;
+  }
+  /* Improve input text readability */
+  input,
+  textarea,
+  select {
+    font-size: 1rem;
+    line-height: 1.6;
+    letter-spacing: 0.01em;
+  }
   /* Skip link styles */
   .sr-only {
     position: absolute;
