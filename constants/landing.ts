@@ -25,7 +25,7 @@ export const LANDING_FEATURES = {
     'Stop navigating the VA system alone. Our AI-powered platform transforms confusion about your benefits into clear action steps toward financial freedom.',
   items: [
     {
-      title: 'Command',
+      title: 'CommandAI',
       description:
         'Chat with Command about VA benefits, disability claims, and transition resources. Get instant answers to questions about your DD-214, C&P exams, and service-connected ratings.',
       iconName: 'MessageSquare',
