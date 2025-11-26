@@ -1,9 +1,4 @@
-export type ModelOption =
-  | 'grok-4-fast'
-  | 'grok-4-fast-reasoning'
-  | 'grok-4-fast-non-reasoning'
-  | 'gpt-4o'
-  | 'gpt-4o-mini'
+export type ModelOption = 'grok-4-1-fast-reasoning' | 'gpt-4o' | 'gpt-4o-mini'
 
 export const MODEL_OPTIONS: { value: ModelOption; label: string; description: string }[] = [
   {
@@ -17,18 +12,8 @@ export const MODEL_OPTIONS: { value: ModelOption; label: string; description: st
     description: 'Fast & cost-efficient',
   },
   {
-    value: 'grok-4-fast',
-    label: 'Grok 4 Fast',
-    description: 'Latest Grok model - fast & capable',
-  },
-  {
-    value: 'grok-4-fast-reasoning',
-    label: 'Grok 4 Reasoning',
-    description: 'Deep reasoning & complex problem-solving',
-  },
-  {
-    value: 'grok-4-fast-non-reasoning',
-    label: 'Grok 4 Speed',
-    description: 'Optimized for speed & straightforward queries',
+    value: 'grok-4-1-fast-reasoning',
+    label: 'Grok 4.1 Fast',
+    description: "xAI's fast reasoning model",
   },
 ]

@@ -43,12 +43,14 @@ const LandingFooter = dynamic(() =>
 export default function SaaSLanding() {
   return (
     <div className="min-h-screen text-foreground font-sans selection:bg-primary/20 overflow-x-hidden relative w-full max-w-full">
-      {/* Three.js animated background */}
+      {/* Three.js animated background - z-[1] renders above body bg */}
       <HeroThreeBackground />
-      <div className="relative z-10 w-full max-w-full">
+
+      {/* Content layer - z-[2] renders above Three.js */}
+      <div className="relative z-[2] w-full max-w-full">
         <MainHeader />
 
-        <main className="relative z-10 w-full max-w-full overflow-x-hidden">
+        <main className="relative w-full max-w-full overflow-x-hidden">
           <LandingHero />
           <LandingFeatures />
           <LandingTestimonials />

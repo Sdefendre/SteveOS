@@ -33,13 +33,13 @@ function HeroParticle({ position, color }: { position: [number, number, number];
 
   return (
     <mesh ref={meshRef} position={position}>
-      <icosahedronGeometry args={[0.08, 0]} />
+      <icosahedronGeometry args={[0.15, 0]} />
       <meshStandardMaterial
         color={color}
         emissive={color}
-        emissiveIntensity={0.7}
+        emissiveIntensity={1.5}
         roughness={0.1}
-        metalness={0.95}
+        metalness={0.9}
       />
     </mesh>
   )
@@ -259,27 +259,28 @@ export function HeroThreeBackground() {
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
   }, [])
 
+  // Show gradient fallback while loading or for reduced motion
   if (shouldReduceMotion || !isReady) {
     return (
-      <div className="fixed inset-0 z-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/20 via-background to-background opacity-40" />
+      <div className="fixed inset-0 z-[1] bg-gradient-to-b from-primary/20 via-transparent to-transparent pointer-events-none" />
     )
   }
 
   return (
-    <div className="fixed inset-0 z-0 opacity-60 pointer-events-none">
+    <div
+      className="fixed inset-0 z-[1] pointer-events-none"
+      style={{ opacity: 1, border: '2px solid red' }}
+    >
       <Canvas
-        camera={{ position: [0, 0, 6], fov: 75 }}
+        camera={{ position: [0, 0, 8], fov: 60 }}
         gl={{
           alpha: true,
-          antialias: false, // Disable antialiasing for better performance
+          antialias: true,
           powerPreference: 'high-performance',
-          stencil: false,
-          depth: false,
         }}
-        style={{ background: 'transparent' }}
-        dpr={[1, 1.5]} // Reduce DPR for better performance
-        frameloop={isVisible ? 'always' : 'never'} // Pause when not visible
-        performance={{ min: 0.5 }} // Allow frame drops for better scroll performance
+        style={{ background: 'transparent', width: '100%', height: '100%' }}
+        dpr={[1, 2]}
+        frameloop={isVisible ? 'always' : 'never'}
       >
         <HeroScene />
       </Canvas>
