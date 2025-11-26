@@ -1,9 +1,15 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useMemo } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { useReducedMotion } from 'framer-motion'
 import * as THREE from 'three'
+
+// Seeded random number generator for deterministic results
+function seededRandom(seed: number) {
+  const x = Math.sin(seed) * 10000
+  return x - Math.floor(x)
+}
 
 // Dashboard-specific particles with data visualization theme
 function DashboardParticle({
@@ -127,6 +133,7 @@ function DashboardCameraController() {
     if (shouldReduceMotion) return
 
     // Professional, controlled camera movement
+    // eslint-disable-next-line react-hooks/immutability -- Camera mutation is standard Three.js pattern in useFrame
     camera.position.x += (mouse.x * 0.3 - camera.position.x) * 0.06
     camera.position.y += (mouse.y * 0.3 - camera.position.y) * 0.06
     camera.lookAt(0, 0, 0)
@@ -179,41 +186,44 @@ function DashboardScene() {
   const shouldReduceMotion = useReducedMotion()
 
   // Reduced particles for better performance
-  const particles = Array.from({ length: shouldReduceMotion ? 15 : 40 }, () => {
+  // Using useMemo with seeded random for deterministic, stable results
+  const particles = useMemo(() => {
     const colors = ['#4f46e5', '#6366f1', '#7c3aed', '#3b82f6']
-    return {
+    const count = shouldReduceMotion ? 15 : 40
+    return Array.from({ length: count }, (_, i) => ({
       position: [
-        (Math.random() - 0.5) * 10,
-        (Math.random() - 0.5) * 10,
-        (Math.random() - 0.5) * 10,
+        (seededRandom(i * 3) - 0.5) * 10,
+        (seededRandom(i * 3 + 1) - 0.5) * 10,
+        (seededRandom(i * 3 + 2) - 0.5) * 10,
       ] as [number, number, number],
-      color: colors[Math.floor(Math.random() * colors.length)],
-    }
-  })
+      color: colors[Math.floor(seededRandom(i * 4) * colors.length)],
+    }))
+  }, [shouldReduceMotion])
 
   // Reduced shapes for better performance
-  const shapes = Array.from({ length: shouldReduceMotion ? 2 : 4 }, () => {
+  const shapes = useMemo(() => {
     const colors = ['#4f46e5', '#6366f1', '#7c3aed']
     const shapeTypes: ('box' | 'tetrahedron' | 'octahedron')[] = [
       'box',
       'tetrahedron',
       'octahedron',
     ]
-    return {
+    const count = shouldReduceMotion ? 2 : 4
+    return Array.from({ length: count }, (_, i) => ({
       position: [
-        (Math.random() - 0.5) * 8,
-        (Math.random() - 0.5) * 8,
-        (Math.random() - 0.5) * 8,
+        (seededRandom(i * 6 + 100) - 0.5) * 8,
+        (seededRandom(i * 6 + 101) - 0.5) * 8,
+        (seededRandom(i * 6 + 102) - 0.5) * 8,
       ] as [number, number, number],
-      rotation: [Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI] as [
-        number,
-        number,
-        number,
-      ],
-      color: colors[Math.floor(Math.random() * colors.length)],
-      shape: shapeTypes[Math.floor(Math.random() * shapeTypes.length)],
-    }
-  })
+      rotation: [
+        seededRandom(i * 6 + 103) * Math.PI,
+        seededRandom(i * 6 + 104) * Math.PI,
+        seededRandom(i * 6 + 105) * Math.PI,
+      ] as [number, number, number],
+      color: colors[Math.floor(seededRandom(i * 7 + 200) * colors.length)],
+      shape: shapeTypes[Math.floor(seededRandom(i * 7 + 201) * shapeTypes.length)],
+    }))
+  }, [shouldReduceMotion])
 
   return (
     <>

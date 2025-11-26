@@ -4,11 +4,11 @@ export const SITE = {
   linkedin: 'https://www.linkedin.com/in/joseph-m-defendre-a11a47225/',
   github: 'https://github.com/Sdefendre',
   youtube: 'https://www.youtube.com/@Stevedefendre',
-  tagline: 'From Confusion → Clarity → Freedom.',
+  tagline: 'From Confusion → Clarity → Wealth.',
   mission:
-    'To leverage AI agents and technology to educate the next generation of veterans. The goal is to move them from confusion to clarity regarding their benefits and financial future.',
-  title: 'Command - Stop Surviving. Start Commanding Your Benefits.',
+    'To leverage AI agents and technology to educate people on financial literacy. The goal is to move them from confusion to clarity regarding their financial future.',
+  title: 'Command - Master Your Financial Future',
   description:
-    'AI-powered education for veterans ready to escape survival mode and unlock financial freedom. Built by veterans, for veterans. Navigate your DD-214, understand C&P exams, and master your service-connected benefits.',
+    'The premier AI-powered education platform designed to teach you financial literacy. Build wealth, eliminate debt, and secure your future with expert guidance.',
   url: 'https://steve-os.vercel.app',
 }

@@ -1,9 +1,15 @@
 'use client'
 
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, useMemo } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { useReducedMotion } from 'framer-motion'
 import * as THREE from 'three'
+
+// Seeded random number generator for deterministic results
+function seededRandom(seed: number) {
+  const x = Math.sin(seed) * 10000
+  return x - Math.floor(x)
+}
 
 // Hero-specific floating particles with more intensity
 function HeroParticle({ position, color }: { position: [number, number, number]; color: string }) {
@@ -118,6 +124,7 @@ function HeroCameraController() {
     if (shouldReduceMotion) return
 
     // More responsive camera movement for hero
+    // eslint-disable-next-line react-hooks/immutability -- Camera mutation is standard Three.js pattern in useFrame
     camera.position.x += (mouse.x * 0.8 - camera.position.x) * 0.12
     camera.position.y += (mouse.y * 0.8 - camera.position.y) * 0.12
     camera.lookAt(0, 0, 0)
@@ -170,41 +177,44 @@ function HeroScene() {
   const shouldReduceMotion = useReducedMotion()
 
   // Reduced particles for better performance
-  const particles = Array.from({ length: shouldReduceMotion ? 20 : 60 }, () => {
+  // Using useMemo with seeded random for deterministic, stable results
+  const particles = useMemo(() => {
     const colors = ['#4f46e5', '#7c3aed', '#6366f1', '#3b82f6', '#8b5cf6']
-    return {
+    const count = shouldReduceMotion ? 20 : 60
+    return Array.from({ length: count }, (_, i) => ({
       position: [
-        (Math.random() - 0.5) * 12,
-        (Math.random() - 0.5) * 8, // More vertical spread
-        (Math.random() - 0.5) * 12,
+        (seededRandom(i * 3) - 0.5) * 12,
+        (seededRandom(i * 3 + 1) - 0.5) * 8, // More vertical spread
+        (seededRandom(i * 3 + 2) - 0.5) * 12,
       ] as [number, number, number],
-      color: colors[Math.floor(Math.random() * colors.length)],
-    }
-  })
+      color: colors[Math.floor(seededRandom(i * 4) * colors.length)],
+    }))
+  }, [shouldReduceMotion])
 
   // Reduced shapes for better performance
-  const shapes = Array.from({ length: shouldReduceMotion ? 3 : 6 }, () => {
+  const shapes = useMemo(() => {
     const colors = ['#4f46e5', '#7c3aed', '#6366f1', '#8b5cf6']
     const shapeTypes: ('box' | 'tetrahedron' | 'octahedron')[] = [
       'box',
       'tetrahedron',
       'octahedron',
     ]
-    return {
+    const count = shouldReduceMotion ? 3 : 6
+    return Array.from({ length: count }, (_, i) => ({
       position: [
-        (Math.random() - 0.5) * 10,
-        (Math.random() - 0.5) * 6,
-        (Math.random() - 0.5) * 10,
+        (seededRandom(i * 6 + 100) - 0.5) * 10,
+        (seededRandom(i * 6 + 101) - 0.5) * 6,
+        (seededRandom(i * 6 + 102) - 0.5) * 10,
       ] as [number, number, number],
-      rotation: [Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI] as [
-        number,
-        number,
-        number,
-      ],
-      color: colors[Math.floor(Math.random() * colors.length)],
-      shape: shapeTypes[Math.floor(Math.random() * shapeTypes.length)],
-    }
-  })
+      rotation: [
+        seededRandom(i * 6 + 103) * Math.PI,
+        seededRandom(i * 6 + 104) * Math.PI,
+        seededRandom(i * 6 + 105) * Math.PI,
+      ] as [number, number, number],
+      color: colors[Math.floor(seededRandom(i * 7 + 200) * colors.length)],
+      shape: shapeTypes[Math.floor(seededRandom(i * 7 + 201) * shapeTypes.length)],
+    }))
+  }, [shouldReduceMotion])
 
   return (
     <>
@@ -231,6 +241,13 @@ function HeroScene() {
 export function HeroThreeBackground() {
   const shouldReduceMotion = useReducedMotion()
   const [isVisible, setIsVisible] = useState(true)
+  const [isReady, setIsReady] = useState(false)
+
+  useEffect(() => {
+    // Delay loading Three.js to prioritize content rendering
+    const timer = setTimeout(() => setIsReady(true), 100)
+    return () => clearTimeout(timer)
+  }, [])
 
   useEffect(() => {
     // Pause animations when page is not visible
@@ -242,14 +259,14 @@ export function HeroThreeBackground() {
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
   }, [])
 
-  if (shouldReduceMotion) {
+  if (shouldReduceMotion || !isReady) {
     return (
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/20 via-background to-background opacity-40" />
+      <div className="fixed inset-0 z-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/20 via-background to-background opacity-40" />
     )
   }
 
   return (
-    <div className="absolute inset-0 -z-10 opacity-50 pointer-events-none">
+    <div className="fixed inset-0 z-0 opacity-60 pointer-events-none">
       <Canvas
         camera={{ position: [0, 0, 6], fov: 75 }}
         gl={{

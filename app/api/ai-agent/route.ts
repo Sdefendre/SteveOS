@@ -141,29 +141,13 @@ export async function POST(request: NextRequest) {
     // Select the appropriate model based on user choice
     let aiModel
     if (isGrok) {
-      // Use Grok models
-      let grokModel: string
-      if (model === 'grok-4.1-fast') {
-        grokModel = 'grok-4.1-fast'
-      } else if (model === 'grok-4-fast-reasoning') {
-        grokModel = 'grok-4-fast-reasoning'
-      } else {
-        grokModel = 'grok-4-fast-non-reasoning'
-      }
-      // Create xAI provider with explicit API key
+      // Use Grok models - pass the model name directly as it matches xAI API
+      // Valid models: grok-4-fast, grok-4-fast-reasoning, grok-4-fast-non-reasoning
       const xaiProvider = createXai({ apiKey })
-      aiModel = xaiProvider(grokModel)
+      aiModel = xaiProvider(model)
     } else {
-      // Use OpenAI models
-      let openaiModel: string
-      if (model === 'gpt-5.1') {
-        openaiModel = 'gpt-5.1'
-      } else if (model === 'gpt-4o') {
-        openaiModel = 'gpt-4o'
-      } else {
-        openaiModel = 'gpt-4o-mini'
-      }
-      aiModel = openai(openaiModel)
+      // Use OpenAI models - gpt-4o or gpt-4o-mini
+      aiModel = openai(model === 'gpt-4o' ? 'gpt-4o' : 'gpt-4o-mini')
     }
 
     // Save user message to database

@@ -10,8 +10,8 @@ export default function TermsOfService() {
         <div className="prose dark:prose-invert max-w-none space-y-4">
           <p>Last updated: {new Date().toLocaleDateString()}</p>
           <p>
-            Please read these Terms of Service ("Terms", "Terms of Service") carefully before using
-            the Life Command OS website operated by us.
+            Please read these Terms of Service (&ldquo;Terms&rdquo;, &ldquo;Terms of Service&rdquo;)
+            carefully before using the Life Command OS website operated by us.
           </p>
 
           <h2 className="text-xl font-semibold mt-8 mb-4">1. Conditions of Use</h2>

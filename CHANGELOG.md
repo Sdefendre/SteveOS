@@ -9,7 +9,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+- **AI Model Configuration**: Updated model picker to use verified, working models
+  - Removed `gpt-5.1` (requires special access/registration)
+  - Removed `grok-4.1-fast` (invalid model name)
+  - Updated to valid xAI models: `grok-4-fast`, `grok-4-fast-reasoning`, `grok-4-fast-non-reasoning`
+  - Simplified API route model handling
+
 ### Fixed
+
+- **Homepage Three.js Background**: Fixed moving background not appearing on homepage
+  - Changed from `absolute` to `fixed` positioning
+  - Updated z-index handling for proper layering
+  - Increased opacity from 50% to 60% for better visibility
+- **Three.js Background Components**: Fixed ESLint errors across all Three.js components
+  - Replaced `Math.random()` with deterministic `seededRandom()` function using `useMemo`
+  - Added eslint-disable comments for intentional camera mutations in `useFrame`
+  - Fixed components: `ThreeBackground`, `SubtleThreeBackground`, `DashboardThreeBackground`, `HeroThreeBackground`
+
+- **Terms Page**: Fixed unescaped quotes causing React/JSX lint errors
+  - Replaced `"` with proper HTML entities (`&ldquo;` and `&rdquo;`)
+
+- **Chat Header**: Fixed duplicate logo showing on desktop
+  - Moved `md:hidden` to parent container for proper responsive hiding
+
+---
+
+### Fixed (Previous)
 
 - **TypeScript Improvements**: Enhanced type safety in CommandChat component
   - Replaced `any` types with `ElementType` for icon props in NavItem and SuggestedCard components

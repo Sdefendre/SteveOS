@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, lazy, Suspense } from 'react'
 import { useChat } from '@ai-sdk/react'
 import type { UIMessage } from 'ai'
 import { motion } from 'framer-motion'
@@ -21,9 +21,13 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select'
 import { CommandMessage, CommandMessageLoading } from './CommandMessage'
-import { VoiceAgent } from '@/components/VoiceAgent'
 import { MODEL_OPTIONS, type ModelOption } from '@/constants/ai'
 import { cn } from '@/lib/utils'
+
+// Lazy load VoiceAgent since it's not needed on initial render
+const VoiceAgent = lazy(() =>
+  import('@/components/VoiceAgent').then((mod) => ({ default: mod.VoiceAgent }))
+)
 
 interface CommandChatProps {
   userId?: string
@@ -95,10 +99,10 @@ const NavItem = ({
 const SidebarContent = ({ showLabels = false }: { showLabels?: boolean }) => (
   <div
     className={cn(
-      'h-full flex flex-col z-30 flex-shrink-0',
+      'h-full min-h-screen flex flex-col z-30 flex-shrink-0',
       showLabels
         ? 'w-full bg-transparent'
-        : 'w-16 md:w-24 items-center py-6 bg-background/50 backdrop-blur-xl border-r border-border/20'
+        : 'w-16 md:w-24 items-center py-6 bg-black/80 backdrop-blur-xl border-r border-white/10'
     )}
   >
     <div className={cn('mb-8', showLabels ? 'px-6 pt-6 flex items-center gap-3' : '')}>
@@ -258,9 +262,9 @@ export function CommandChat({ userId }: CommandChatProps) {
   const toggleVoiceMode = () => setIsVoiceMode(!isVoiceMode)
 
   return (
-    <div className="flex h-full w-full overflow-hidden bg-transparent text-foreground font-sans">
+    <div className="flex h-full min-h-[100dvh] w-full overflow-hidden bg-transparent text-foreground font-sans">
       {/* Sidebar - Hidden on mobile */}
-      <div className="hidden md:flex">
+      <div className="hidden md:flex h-screen sticky top-0">
         <SidebarContent />
       </div>
 
@@ -327,22 +331,31 @@ export function CommandChat({ userId }: CommandChatProps) {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col min-w-0 relative h-full">
+      <div className="flex-1 flex flex-col min-w-0 relative h-screen">
         {/* Content Area */}
-        <div className="flex-1 overflow-y-auto relative scroll-smooth custom-scrollbar flex flex-col pt-4 md:pt-0">
+        <div className="flex-1 overflow-y-auto relative scroll-smooth custom-scrollbar flex flex-col pt-16 md:pt-0">
           {isVoiceMode ? (
             <div className="h-full flex flex-col items-center justify-center p-6">
-              <VoiceAgent userId={userId} />
+              <Suspense
+                fallback={
+                  <div className="text-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+                    <p className="text-muted-foreground text-sm">Loading voice...</p>
+                  </div>
+                }
+              >
+                <VoiceAgent userId={userId} />
+              </Suspense>
             </div>
           ) : (
             <>
               {messages.length === 0 ? (
-                <div className="flex-1 flex flex-col items-center p-4 md:p-8 max-w-5xl mx-auto w-full pb-24 md:pb-8">
+                <div className="flex-1 flex flex-col items-center justify-end p-4 md:p-8 max-w-5xl mx-auto w-full pb-8">
                   <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.5 }}
-                    className="flex flex-col items-center text-center w-full mt-auto md:my-auto mb-2 md:mb-12"
+                    className="flex flex-col items-center text-center w-full"
                   >
                     {!(inputValue || '').trim() && (
                       <>
@@ -357,7 +370,7 @@ export function CommandChat({ userId }: CommandChatProps) {
                     )}
 
                     {/* Search Input Centered */}
-                    <div className="w-full max-w-2xl relative group mb-8 md:mb-12 px-2">
+                    <div className="w-full max-w-2xl relative group px-2">
                       <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 via-secondary/20 to-primary/20 rounded-full blur opacity-50 group-hover:opacity-100 transition duration-500" />
                       <div className="relative flex items-center bg-white/5 backdrop-blur-xl rounded-full border border-white/10 focus-within:border-primary/50 transition-all shadow-2xl">
                         <Search className="h-5 w-5 text-muted-foreground ml-4 md:ml-5 shrink-0" />
@@ -425,7 +438,7 @@ export function CommandChat({ userId }: CommandChatProps) {
                   </motion.div>
                 </div>
               ) : (
-                <div className="flex flex-col min-h-full pb-32 pt-20 md:pt-10">
+                <div className="flex flex-col min-h-full pb-40 pt-4 md:pt-10">
                   <div className="max-w-3xl mx-auto w-full px-4 space-y-2 md:space-y-0">
                     {messages.map((message: UIMessage, i: number) => (
                       <CommandMessage
@@ -450,7 +463,7 @@ export function CommandChat({ userId }: CommandChatProps) {
 
         {/* Floating Input Area (Only visible when there are messages) */}
         {!isVoiceMode && messages.length > 0 && (
-          <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4 bg-gradient-to-t from-background via-background/95 to-transparent pt-6 md:pt-10 z-20 supports-[padding-bottom:env(safe-area-inset-bottom)]:pb-[max(12px,env(safe-area-inset-bottom))]">
+          <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4 bg-gradient-to-t from-background via-background/95 to-transparent pt-8 md:pt-10 z-20 pb-[max(12px,env(safe-area-inset-bottom))]">
             <div className="max-w-3xl mx-auto">
               <div className="relative bg-zinc-900/90 backdrop-blur-xl rounded-2xl md:rounded-3xl border border-white/10 focus-within:border-primary/50 transition-all shadow-2xl overflow-hidden">
                 <form onSubmit={handleSubmit} className="flex flex-col">

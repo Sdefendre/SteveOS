@@ -2,6 +2,12 @@ import { MainHeader } from '@/components/MainHeader'
 import { LandingHero } from '@/components/landing/LandingHero'
 import dynamic from 'next/dynamic'
 
+// Dynamically import the Three.js background for better performance
+const HeroThreeBackground = dynamic(
+  () => import('@/components/landing/HeroThreeBackground').then((mod) => mod.HeroThreeBackground),
+  { ssr: false }
+)
+
 // Dynamically import below-the-fold components to reduce initial bundle size
 const LandingFeatures = dynamic(
   () => import('@/components/landing/LandingFeatures').then((mod) => mod.LandingFeatures),
@@ -37,6 +43,8 @@ const LandingFooter = dynamic(() =>
 export default function SaaSLanding() {
   return (
     <div className="min-h-screen text-foreground font-sans selection:bg-primary/20 overflow-x-hidden relative w-full max-w-full">
+      {/* Three.js animated background */}
+      <HeroThreeBackground />
       <div className="relative z-10 w-full max-w-full">
         <MainHeader />
 

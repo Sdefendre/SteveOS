@@ -73,6 +73,13 @@ function GalaxyScene() {
 export function CommandThreeBackground() {
   const shouldReduceMotion = useReducedMotion()
   const [isVisible, setIsVisible] = useState(true)
+  const [isReady, setIsReady] = useState(false)
+
+  useEffect(() => {
+    // Delay loading Three.js to prioritize content rendering
+    const timer = setTimeout(() => setIsReady(true), 50)
+    return () => clearTimeout(timer)
+  }, [])
 
   useEffect(() => {
     const handleVisibilityChange = () => {
@@ -83,16 +90,16 @@ export function CommandThreeBackground() {
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
   }, [])
 
-  if (shouldReduceMotion) {
-    return <div className="fixed inset-0 -z-10 bg-black" />
+  if (shouldReduceMotion || !isReady) {
+    return <div className="fixed inset-0 z-0 bg-black" />
   }
 
   return (
-    <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-slate-900 via-[#0a0a0a] to-black">
+    <div className="fixed inset-0 z-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-slate-900 via-[#0a0a0a] to-black">
       <Canvas
-        camera={{ position: [0, 0, 1], fov: 45 }}
+        camera={{ position: [0, 0, 50], fov: 60 }}
         gl={{
-          antialias: true,
+          antialias: false,
           alpha: false,
           powerPreference: 'high-performance',
         }}

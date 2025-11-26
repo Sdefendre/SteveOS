@@ -2,9 +2,8 @@
 
 import dynamic from 'next/dynamic'
 
-// Remove ssr: false since this is already a client component
-// This helps avoid webpack chunk resolution issues during build
 const SaaSLanding = dynamic(() => import('@/components/SaaSLanding'), {
+  ssr: false,
   loading: () => (
     <div className="min-h-screen flex items-center justify-center bg-background text-foreground">
       <div className="text-center">

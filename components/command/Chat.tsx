@@ -1,0 +1,151 @@
+'use client'
+
+import { useState, useCallback, useEffect, useRef } from 'react'
+import { useChat } from '@ai-sdk/react'
+import { ChatHeader } from './ChatHeader'
+import { ChatSidebar } from './ChatSidebar'
+import { Messages } from './Messages'
+import { ChatInput } from './ChatInput'
+import { type ModelOption } from '@/constants/ai'
+
+interface ChatProps {
+  userId?: string
+}
+
+export function Chat({ userId }: ChatProps) {
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [selectedModel, setSelectedModel] = useState<ModelOption>('gpt-4o-mini')
+  const [inputValue, setInputValue] = useState('')
+  const [conversationId, setConversationId] = useState<string>('')
+  const [isClient, setIsClient] = useState(false)
+
+  // Mark as client-side after mount
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
+  // Initialize conversation ID on client side only
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const stored = sessionStorage.getItem('ai-conversation-id')
+      if (stored) {
+        setConversationId(stored)
+      } else {
+        const newId = `conv-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`
+        sessionStorage.setItem('ai-conversation-id', newId)
+        setConversationId(newId)
+      }
+    }
+  }, [])
+
+  const chatResult = useChat({
+    api: '/api/ai-agent',
+    body: {
+      userId,
+      model: selectedModel,
+      conversationId: conversationId || undefined,
+    },
+  } as any) as any
+
+  const messages = chatResult?.messages || []
+  const status = chatResult?.status || 'ready'
+  const setMessages = chatResult?.setMessages
+  const stop = chatResult?.stop
+  const append = chatResult?.append
+
+  const isLoading = status === 'submitted' || status === 'streaming'
+
+  const handleSubmit = useCallback(async () => {
+    const trimmedInput = inputValue.trim()
+    if (!trimmedInput) return
+
+    if (typeof append !== 'function') {
+      console.error('append is not ready yet')
+      return
+    }
+
+    setInputValue('')
+
+    try {
+      await append({
+        role: 'user',
+        content: trimmedInput,
+      })
+    } catch (e) {
+      console.error('Failed to send message:', e)
+      setInputValue(trimmedInput)
+    }
+  }, [inputValue, append])
+
+  const handleSuggestionClick = useCallback(
+    async (suggestion: string) => {
+      if (typeof append !== 'function') {
+        console.error('append is not ready yet')
+        return
+      }
+      setInputValue('')
+      try {
+        await append({
+          role: 'user',
+          content: suggestion,
+        })
+      } catch (e) {
+        console.error('Failed to send suggestion:', e)
+      }
+    },
+    [append]
+  )
+
+  const handleNewChat = useCallback(() => {
+    if (setMessages) {
+      setMessages([])
+    }
+    setInputValue('')
+    // Generate new conversation ID
+    const newId = `conv-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`
+    sessionStorage.setItem('ai-conversation-id', newId)
+    setConversationId(newId)
+  }, [setMessages])
+
+  const handleStop = useCallback(() => {
+    if (typeof stop === 'function') {
+      stop()
+    }
+  }, [stop])
+
+  // Don't render until client-side to avoid hydration mismatch
+  if (!isClient) {
+    return (
+      <div className="flex h-screen w-full bg-transparent items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex h-screen w-full bg-transparent">
+      {/* Sidebar */}
+      <ChatSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col min-w-0 h-screen">
+        {/* Header */}
+        <ChatHeader onNewChat={handleNewChat} onToggleSidebar={() => setSidebarOpen(true)} />
+
+        {/* Messages */}
+        <Messages messages={messages} status={status} onSuggestionClick={handleSuggestionClick} />
+
+        {/* Input */}
+        <ChatInput
+          input={inputValue}
+          setInput={setInputValue}
+          onSubmit={handleSubmit}
+          onStop={handleStop}
+          isLoading={isLoading}
+          selectedModel={selectedModel}
+          onModelChange={setSelectedModel}
+        />
+      </div>
+    </div>
+  )
+}
