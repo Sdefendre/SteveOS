@@ -1,16 +1,22 @@
 import { NextRequest } from 'next/server'
 import { streamText } from 'ai'
-import { openai } from '@ai-sdk/openai'
 import { createXai } from '@ai-sdk/xai'
+import { DEFAULT_MODEL } from '@/constants/ai'
 import { buildPrompt, SYSTEM_PROMPT, type ConversationMessage } from '@/lib/ai-agent'
-import { checkRateLimit, saveConversation } from '@/lib/supabase'
+import { checkRateLimit, isSupabaseConfigured, saveConversation } from '@/lib/supabase'
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     // useChat with DefaultChatTransport sends: { messages, data, ...body }
     // The body object from transport config (userId, model) is merged into the request body
-    const { messages: chatMessages, userId, model = 'gpt-4o-mini', conversationId } = body
+    const { messages: chatMessages, userId, conversationId } = body
+    const resolvedModel = DEFAULT_MODEL
+
+    // Warn (but allow) if Supabase isn’t configured; KB/Reddit will be skipped gracefully
+    if (!isSupabaseConfigured) {
+      console.warn('Supabase not configured; knowledge base and Reddit context will be skipped.')
+    }
 
     // Use provided conversation ID or generate a new one (for tracking conversations)
     const currentConversationId =
@@ -30,18 +36,14 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Determine which provider to use based on model
-    const isGrok = model.startsWith('grok-')
-    const apiKey = isGrok ? process.env.XAI_API_KEY : process.env.OPENAI_API_KEY
-    const apiKeyName = isGrok ? 'XAI_API_KEY' : 'OPENAI_API_KEY'
-
-    // Check if API key is configured
+    const apiKey = process.env.XAI_API_KEY
     if (!apiKey) {
-      console.error(`${apiKeyName} is not configured`)
+      console.error('XAI_API_KEY is not configured')
       return new Response(
         JSON.stringify({
           error: 'AI service not configured',
-          message: `The ${isGrok ? 'XAI (Grok)' : 'OpenAI'} API key is not configured. Please add ${apiKeyName} to your environment variables.`,
+          message:
+            'The XAI_API_KEY environment variable is missing. Add your Grok key to .env.local.',
         }),
         { status: 500, headers: { 'Content-Type': 'application/json' } }
       )
@@ -138,22 +140,14 @@ export async function POST(request: NextRequest) {
       })
     }
 
-    // Select the appropriate model based on user choice
-    let aiModel
-    if (isGrok) {
-      // Use Grok models - pass the model name directly as it matches xAI API
-      // Valid models: grok-4-fast, grok-4-fast-reasoning, grok-4-fast-non-reasoning
-      const xaiProvider = createXai({ apiKey })
-      aiModel = xaiProvider(model)
-    } else {
-      // Use OpenAI models - gpt-4o or gpt-4o-mini
-      aiModel = openai(model === 'gpt-4o' ? 'gpt-4o' : 'gpt-4o-mini')
-    }
+    // Select Grok model (only supported option)
+    const xaiProvider = createXai({ apiKey })
+    const aiModel = xaiProvider(resolvedModel)
 
     // Save user message to database
     if (userId && lastUserMessage) {
       await saveConversation(userId, currentConversationId, 'user', lastUserMessage, {
-        model,
+        model: resolvedModel,
         timestamp: new Date().toISOString(),
       }).catch((err) => {
         console.error('Failed to save user message:', err)
@@ -167,12 +161,12 @@ export async function POST(request: NextRequest) {
       messages,
       temperature: 0.7,
       // @ts-expect-error - maxTokens is supported by providers but might be missing in type definition
-      maxTokens: isGrok ? 2000 : 1000, // Grok supports longer responses
+      maxTokens: 2000,
       onFinish: async ({ text }) => {
         // Save assistant response after streaming completes
         if (userId && text) {
           await saveConversation(userId, currentConversationId, 'assistant', text, {
-            model,
+            model: resolvedModel,
             timestamp: new Date().toISOString(),
           }).catch((err) => {
             console.error('Failed to save assistant message:', err)
@@ -182,8 +176,7 @@ export async function POST(request: NextRequest) {
     })
 
     // Return the streaming response with conversation ID in headers
-    // Use toTextStreamResponse() as suggested by the compiler
-    const response = result.toTextStreamResponse()
+    const response = result.toAIStreamResponse()
 
     response.headers.set('X-Conversation-ID', currentConversationId)
     response.headers.set('X-Rate-Limit-Remaining', String(rateLimit.remaining))
