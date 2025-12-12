@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useEffect, useRef } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { useChat } from '@ai-sdk/react'
 import { useAuth } from '@/lib/auth'
 import { ChatHeader } from './ChatHeader'
@@ -8,6 +8,7 @@ import { ChatSidebar } from './ChatSidebar'
 import { Messages } from './Messages'
 import { ChatInput } from './ChatInput'
 import { DEFAULT_MODEL, type ModelOption } from '@/constants/ai'
+import { useChatHistory } from '@/lib/use-chat-history'
 
 export function Chat() {
   const { user } = useAuth()
@@ -18,6 +19,16 @@ export function Chat() {
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [conversationId, setConversationId] = useState<string>('')
   const [isClient, setIsClient] = useState(false)
+
+  // Chat history hook
+  const {
+    conversations,
+    isLoading: isHistoryLoading,
+    error: historyError,
+    refresh: refreshHistory,
+    loadConversation,
+    deleteConversation,
+  } = useChatHistory(userId)
 
   // Mark as client-side after mount
   useEffect(() => {
@@ -111,7 +122,61 @@ export function Chat() {
     const newId = `conv-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`
     sessionStorage.setItem('ai-conversation-id', newId)
     setConversationId(newId)
+    setSidebarOpen(false)
   }, [setMessages])
+
+  // Handle selecting a conversation from history
+  const handleSelectConversation = useCallback(
+    async (selectedConversationId: string) => {
+      if (selectedConversationId === conversationId) {
+        setSidebarOpen(false)
+        return
+      }
+
+      const conversationMessages = await loadConversation(selectedConversationId)
+
+      if (conversationMessages.length > 0 && setMessages) {
+        const uiMessages = conversationMessages
+          .filter((msg) => msg.role !== 'system')
+          .map((msg, index) => ({
+            id: `${msg.conversation_id}-${index}`,
+            role: msg.role as 'user' | 'assistant',
+            content: msg.message,
+            createdAt: msg.created_at ? new Date(msg.created_at) : new Date(),
+            parts: [{ type: 'text' as const, text: msg.message }],
+          }))
+
+        setConversationId(selectedConversationId)
+        sessionStorage.setItem('ai-conversation-id', selectedConversationId)
+        setMessages(uiMessages)
+      }
+
+      setSidebarOpen(false)
+    },
+    [conversationId, loadConversation, setMessages]
+  )
+
+  // Handle deleting a conversation
+  const handleDeleteConversation = useCallback(
+    async (deleteConversationId: string) => {
+      const success = await deleteConversation(deleteConversationId)
+
+      if (success && deleteConversationId === conversationId) {
+        handleNewChat()
+      }
+    },
+    [conversationId, deleteConversation, handleNewChat]
+  )
+
+  // Refresh history when messages change
+  useEffect(() => {
+    if (messages.length > 0 && userId) {
+      const timeout = setTimeout(() => {
+        refreshHistory()
+      }, 1000)
+      return () => clearTimeout(timeout)
+    }
+  }, [messages.length, userId, refreshHistory])
 
   const handleStop = useCallback(() => {
     if (typeof stop === 'function') {
@@ -131,7 +196,17 @@ export function Chat() {
   return (
     <div className="flex h-screen w-full bg-transparent">
       {/* Sidebar */}
-      <ChatSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <ChatSidebar
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        conversations={conversations}
+        currentConversationId={conversationId}
+        isLoadingHistory={isHistoryLoading}
+        historyError={historyError}
+        onSelectConversation={handleSelectConversation}
+        onDeleteConversation={handleDeleteConversation}
+        onNewConversation={handleNewChat}
+      />
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0 h-screen">
