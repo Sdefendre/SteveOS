@@ -6,6 +6,50 @@
 export interface Database {
   public: {
     Tables: {
+      feedback: {
+        Row: {
+          id: number
+          created_at: string | null
+          updated_at: string | null
+          type: 'general' | 'bug' | 'feature' | 'content' | null
+          message: string
+          rating: number | null
+          email: string | null
+          path: string | null
+          user_agent: string | null
+          status: 'new' | 'in-progress' | 'resolved' | null
+          admin_notes: string | null
+          resolved_at: string | null
+        }
+        Insert: {
+          id?: number
+          created_at?: string | null
+          updated_at?: string | null
+          type?: 'general' | 'bug' | 'feature' | 'content' | null
+          message: string
+          rating?: number | null
+          email?: string | null
+          path?: string | null
+          user_agent?: string | null
+          status?: 'new' | 'in-progress' | 'resolved' | null
+          admin_notes?: string | null
+          resolved_at?: string | null
+        }
+        Update: {
+          id?: number
+          created_at?: string | null
+          updated_at?: string | null
+          type?: 'general' | 'bug' | 'feature' | 'content' | null
+          message?: string
+          rating?: number | null
+          email?: string | null
+          path?: string | null
+          user_agent?: string | null
+          status?: 'new' | 'in-progress' | 'resolved' | null
+          admin_notes?: string | null
+          resolved_at?: string | null
+        }
+      }
       site_feedback: {
         Row: {
           id: number
@@ -16,6 +60,9 @@ export interface Database {
           email: string | null
           path: string | null
           user_agent: string | null
+          status: 'new' | 'in-progress' | 'resolved' | null
+          admin_response: string | null
+          responded_at: string | null
         }
         Insert: {
           id?: number
@@ -26,6 +73,9 @@ export interface Database {
           email?: string | null
           path?: string | null
           user_agent?: string | null
+          status?: 'new' | 'in-progress' | 'resolved' | null
+          admin_response?: string | null
+          responded_at?: string | null
         }
         Update: {
           id?: number
@@ -36,6 +86,9 @@ export interface Database {
           email?: string | null
           path?: string | null
           user_agent?: string | null
+          status?: 'new' | 'in-progress' | 'resolved' | null
+          admin_response?: string | null
+          responded_at?: string | null
         }
       }
       course_access: {

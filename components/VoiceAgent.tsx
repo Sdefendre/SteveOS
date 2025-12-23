@@ -124,7 +124,14 @@ export function VoiceAgent({ userId }: VoiceAgentProps) {
 
       if (!response.ok) {
         const errorData = await response.json()
-        throw new Error(errorData.error || 'Failed to create session')
+        // Handle rate limit errors with specific message
+        if (response.status === 429) {
+          throw new Error(
+            errorData.message ||
+              'Rate limit exceeded. Please upgrade to premium for unlimited access.'
+          )
+        }
+        throw new Error(errorData.message || errorData.error || 'Failed to create session')
       }
 
       const { sessionToken } = await response.json()

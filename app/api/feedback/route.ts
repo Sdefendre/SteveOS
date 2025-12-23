@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getSupabaseClient } from '@/lib/supabase'
+import { sendFeedbackNotificationToAdmin } from '@/lib/feedback-email'
 
 export async function POST(request: NextRequest) {
   try {
@@ -47,6 +48,7 @@ export async function POST(request: NextRequest) {
         email: validEmail,
         path: path || '/',
         user_agent: userAgent || null,
+        status: 'new',
       })
       .select()
       .single()
@@ -58,6 +60,17 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       )
     }
+
+    // Send email notification to admin (async, don't wait)
+    sendFeedbackNotificationToAdmin({
+      id: data.id,
+      type: feedbackType,
+      message: message.trim(),
+      rating: validRating,
+      email: validEmail,
+      path: path || '/',
+      created_at: data.created_at || new Date().toISOString(),
+    }).catch((err) => console.error('Failed to send notification:', err))
 
     return NextResponse.json(
       {
@@ -129,13 +142,68 @@ export async function GET(request: NextRequest) {
   }
 }
 
+// PATCH endpoint to update feedback status
+export async function PATCH(request: NextRequest) {
+  try {
+    const body = await request.json()
+    const { id, status } = body
+
+    // Validate required fields
+    if (!id || typeof id !== 'number') {
+      return NextResponse.json({ error: 'Feedback ID is required' }, { status: 400 })
+    }
+
+    // Validate status
+    const validStatuses = ['new', 'in-progress', 'resolved']
+    if (!status || !validStatuses.includes(status)) {
+      return NextResponse.json(
+        { error: 'Valid status is required (new, in-progress, resolved)' },
+        { status: 400 }
+      )
+    }
+
+    const supabase = getSupabaseClient()
+
+    if (!supabase) {
+      return NextResponse.json({ error: 'Supabase is not configured' }, { status: 500 })
+    }
+
+    // Update feedback status
+    const { data, error } = await supabase
+      .from('site_feedback')
+      .update({ status })
+      .eq('id', id)
+      .select()
+      .single()
+
+    if (error) {
+      console.error('Supabase error:', error)
+      return NextResponse.json({ error: 'Failed to update feedback status' }, { status: 500 })
+    }
+
+    return NextResponse.json(
+      {
+        message: 'Feedback status updated successfully',
+        feedback: data,
+      },
+      { status: 200 }
+    )
+  } catch (error) {
+    console.error('Feedback status update error:', error)
+    return NextResponse.json(
+      { error: 'Failed to update feedback status. Please try again later.' },
+      { status: 500 }
+    )
+  }
+}
+
 // Handle CORS preflight
 export async function OPTIONS() {
   return new NextResponse(null, {
     status: 200,
     headers: {
       'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+      'Access-Control-Allow-Methods': 'POST, GET, PATCH, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
     },
   })

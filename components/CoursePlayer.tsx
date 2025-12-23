@@ -1,12 +1,12 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Progress } from '@/components/ui/progress'
-import { Badge } from '@/components/ui/badge'
-import { CheckCircle2, Circle, ChevronRight, ChevronLeft, Loader2 } from 'lucide-react'
-import { CourseModule } from './CourseContent'
+import { CheckCircle2, ChevronRight, ChevronLeft, Loader2 } from 'lucide-react'
+import { CourseModule, CourseLesson, getAllLessons } from '@/constants/course'
+import { CourseSidebar } from './course/CourseSidebar'
+import { LessonContent } from './course/LessonContent'
 
 interface CoursePlayerProps {
   modules: CourseModule[]
@@ -19,9 +19,11 @@ export function CoursePlayer({
   courseId = '0-100-rating-course',
   userId,
 }: CoursePlayerProps) {
-  const [currentModuleIndex, setCurrentModuleIndex] = useState(0)
-  const [completedModules, setCompletedModules] = useState<Set<string>>(new Set())
-  const [progress, setProgress] = useState(0)
+  // Flatten lessons from modules
+  const allLessons = modules.flatMap((module) => module.lessons)
+
+  const [currentLessonIndex, setCurrentLessonIndex] = useState(0)
+  const [completedLessons, setCompletedLessons] = useState<Set<string>>(new Set())
   const [isLoading, setIsLoading] = useState(true)
 
   // Fetch progress on mount
@@ -41,7 +43,7 @@ export function CoursePlayer({
             const completedIds = new Set<string>(
               data.progress.map((p: any) => p.module_id as string)
             )
-            setCompletedModules(completedIds)
+            setCompletedLessons(completedIds)
           }
         }
       } catch (error) {
@@ -54,32 +56,32 @@ export function CoursePlayer({
     fetchProgress()
   }, [userId, courseId])
 
-  useEffect(() => {
-    // Calculate progress
-    const completed = completedModules.size
-    const total = modules.length
-    setProgress(total > 0 ? (completed / total) * 100 : 0)
-  }, [completedModules, modules.length])
+  const currentLesson = allLessons[currentLessonIndex]
+  const hasNext = currentLessonIndex < allLessons.length - 1
+  const hasPrev = currentLessonIndex > 0
 
-  const currentModule = modules[currentModuleIndex]
-  const hasNext = currentModuleIndex < modules.length - 1
-  const hasPrev = currentModuleIndex > 0
+  const handleLessonSelect = (lessonId: string) => {
+    const index = allLessons.findIndex((lesson) => lesson.id === lessonId)
+    if (index !== -1) {
+      setCurrentLessonIndex(index)
+    }
+  }
 
   const handleNext = () => {
     if (hasNext) {
-      setCurrentModuleIndex(currentModuleIndex + 1)
+      setCurrentLessonIndex(currentLessonIndex + 1)
     }
   }
 
   const handlePrev = () => {
     if (hasPrev) {
-      setCurrentModuleIndex(currentModuleIndex - 1)
+      setCurrentLessonIndex(currentLessonIndex - 1)
     }
   }
 
   const handleComplete = async () => {
-    const moduleId = currentModule.id
-    setCompletedModules((prev) => new Set(prev).add(moduleId))
+    const lessonId = currentLesson.id
+    setCompletedLessons((prev) => new Set(prev).add(lessonId))
 
     // Save progress to database
     if (userId) {
@@ -90,7 +92,7 @@ export function CoursePlayer({
           body: JSON.stringify({
             userId,
             courseId,
-            moduleId,
+            moduleId: lessonId, // Using lessonId as moduleId for backward compatibility
             completed: true,
           }),
         })
@@ -110,67 +112,22 @@ export function CoursePlayer({
 
   return (
     <div className="flex flex-col lg:flex-row gap-6 h-full">
-      {/* Sidebar - Module List */}
+      {/* Sidebar - Module and Lesson List */}
       <div className="lg:w-80 shrink-0">
-        <Card className="glass">
-          <CardHeader>
-            <CardTitle className="text-lg">Course Progress</CardTitle>
-            <div className="mt-2">
-              <Progress value={progress} className="h-2" />
-              <p className="text-sm text-muted-foreground mt-1">
-                {completedModules.size} of {modules.length} modules completed
-              </p>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              {modules.map((module, index) => {
-                const isCompleted = completedModules.has(module.id)
-                const isCurrent = index === currentModuleIndex
-                return (
-                  <button
-                    key={module.id}
-                    onClick={() => setCurrentModuleIndex(index)}
-                    className={`w-full text-left p-3 rounded-lg transition-colors ${
-                      isCurrent
-                        ? 'bg-primary/20 border border-primary/30'
-                        : 'hover:bg-muted/50 border border-transparent'
-                    }`}
-                  >
-                    <div className="flex items-start gap-3">
-                      {isCompleted ? (
-                        <CheckCircle2 className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
-                      ) : (
-                        <Circle className="h-5 w-5 text-muted-foreground shrink-0 mt-0.5" />
-                      )}
-                      <div className="flex-1 min-w-0">
-                        <div className="text-sm font-medium">{module.title}</div>
-                        <div className="text-xs text-muted-foreground mt-1">{module.duration}</div>
-                      </div>
-                    </div>
-                  </button>
-                )
-              })}
-            </div>
-          </CardContent>
-        </Card>
+        <CourseSidebar
+          modules={modules}
+          currentLessonId={currentLesson.id}
+          completedLessonIds={completedLessons}
+          onLessonSelect={handleLessonSelect}
+        />
       </div>
 
       {/* Main Content */}
       <div className="flex-1">
         <Card className="glass h-full flex flex-col">
-          <CardHeader>
-            <div className="flex items-start justify-between">
-              <div>
-                <CardTitle className="text-2xl mb-2">{currentModule.title}</CardTitle>
-                <CardDescription>{currentModule.description}</CardDescription>
-              </div>
-              <Badge variant="outline">{currentModule.duration}</Badge>
-            </div>
-          </CardHeader>
-          <CardContent className="flex-1 flex flex-col">
-            <div className="flex-1 prose prose-sm dark:prose-invert max-w-none">
-              {currentModule.content}
+          <CardContent className="flex-1 flex flex-col pt-6">
+            <div className="flex-1 overflow-y-auto">
+              <LessonContent lesson={currentLesson} />
             </div>
 
             {/* Navigation */}
@@ -181,18 +138,18 @@ export function CoursePlayer({
               </Button>
 
               <div className="flex gap-2">
-                {!completedModules.has(currentModule.id) && (
+                {!completedLessons.has(currentLesson.id) && (
                   <Button onClick={handleComplete} variant="outline">
                     Mark Complete
                   </Button>
                 )}
                 {hasNext ? (
                   <Button onClick={handleNext}>
-                    Next Module
+                    Next Lesson
                     <ChevronRight className="h-4 w-4 ml-2" />
                   </Button>
                 ) : (
-                  <Button disabled={!completedModules.has(currentModule.id)}>
+                  <Button disabled={!completedLessons.has(currentLesson.id)}>
                     <CheckCircle2 className="h-4 w-4 mr-2" />
                     Course Complete!
                   </Button>

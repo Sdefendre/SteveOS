@@ -1,5 +1,11 @@
 /**
- * Course content data structure with enhanced formatting and moderate-detail educational content
+ * @deprecated This file is deprecated. Use @/constants/course instead.
+ *
+ * Course content has been moved to a more maintainable structure:
+ * - Course data: @/constants/course
+ * - Components: @/components/course/
+ *
+ * This file is kept for backward compatibility but will be removed in a future version.
  */
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'

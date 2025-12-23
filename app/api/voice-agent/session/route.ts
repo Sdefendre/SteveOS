@@ -1,11 +1,41 @@
+import { NextRequest } from 'next/server'
+import { checkRateLimit } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase/server'
+
 /**
  * API route to create a session token for OpenAI Voice Agent
  * This route securely handles the API key on the server side
  */
-export async function POST() {
+export async function POST(request: NextRequest) {
   try {
-    // const body = await request.json()
-    // const { userId } = body
+    const body = await request.json()
+    const { userId: bodyUserId } = body
+
+    // Get authenticated user from server session (preferred) or fallback to body userId
+    let userId = bodyUserId
+    const supabase = await createClient()
+    if (supabase) {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      if (user) {
+        userId = user.id
+      }
+    }
+
+    // Check rate limiting
+    const rateLimit = await checkRateLimit(userId)
+    if (!rateLimit.allowed) {
+      return new Response(
+        JSON.stringify({
+          error: 'Rate limit exceeded',
+          message: `You have reached your daily limit (${rateLimit.limit} queries). Upgrade to premium for unlimited access.`,
+          remaining: rateLimit.remaining,
+          limit: rateLimit.limit,
+        }),
+        { status: 429, headers: { 'Content-Type': 'application/json' } }
+      )
+    }
 
     // Check if OpenAI API key is configured
     const apiKey = process.env.OPENAI_API_KEY
@@ -19,18 +49,6 @@ export async function POST() {
         { status: 500, headers: { 'Content-Type': 'application/json' } }
       )
     }
-
-    // TODO: Add rate limiting check here if needed
-    // const rateLimit = await checkRateLimit(userId)
-    // if (!rateLimit.allowed) {
-    //   return new Response(
-    //     JSON.stringify({
-    //       error: 'Rate limit exceeded',
-    //       message: `You have reached your daily limit. Upgrade to premium for unlimited access.`,
-    //     }),
-    //     { status: 429, headers: { 'Content-Type': 'application/json' } }
-    //   )
-    // }
 
     // Create a new ephemeral session with OpenAI
     const response = await fetch('https://api.openai.com/v1/realtime/sessions', {
@@ -60,13 +78,19 @@ export async function POST() {
     const data = await response.json()
 
     // Return the ephemeral client secret as the session token
+    const headers = new Headers({
+      'Content-Type': 'application/json',
+      'X-Rate-Limit-Remaining': String(rateLimit.remaining),
+      'X-Rate-Limit-Limit': String(rateLimit.limit),
+    })
+
     return new Response(
       JSON.stringify({
         sessionToken: data.client_secret,
       }),
       {
         status: 200,
-        headers: { 'Content-Type': 'application/json' },
+        headers,
       }
     )
   } catch (error) {

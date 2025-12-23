@@ -3,7 +3,7 @@ import { MainHeader } from '@/components/MainHeader'
 import { LandingFooter } from '@/components/landing/LandingFooter'
 import { SubtleThreeBackgroundWrapper } from '@/components/SubtleThreeBackgroundWrapper'
 import { CoursePlayer } from '@/components/CoursePlayer'
-import { courseModules } from '@/components/CourseContent'
+import { course } from '@/constants/course'
 import { checkCourseAccess } from '@/lib/supabase'
 import { createClient } from '@/lib/supabase/server'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -27,9 +27,14 @@ export default async function CourseContentPage({
 }: CourseContentPageProps) {
   // Get authenticated user from Supabase
   const supabase = await createClient()
+
+  if (!supabase) {
+    redirect('/login?redirect=/course/content')
+  }
+
   const {
     data: { user },
-  } = supabase ? await supabase.auth.getUser() : { data: { user: null } }
+  } = await supabase.auth.getUser()
 
   // If user is not authenticated, redirect to login
   if (!user) {
@@ -84,7 +89,7 @@ export default async function CourseContentPage({
           </p>
         </div>
 
-        <CoursePlayer modules={courseModules} courseId="0-100-rating-course" userId={userId} />
+        <CoursePlayer modules={course.modules} courseId="0-100-rating-course" userId={userId} />
       </main>
 
       <LandingFooter />

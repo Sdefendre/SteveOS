@@ -59,23 +59,20 @@ This document lists all unfinished features found in the Command codebase, organ
 
 ---
 
+## ✅ Completed - Course Content Page Authentication
+
 ### 4. Course Content Page Authentication
 
-**Status:** Placeholder implementation  
-**Priority:** High  
-**Impact:** Course page always redirects (userId is always undefined)
+**Status:** ✅ Fully implemented
+**Completed:** December 2024
 
-**Files:**
+**What was implemented:**
 
-- `app/course/content/page.tsx` (line 27-34): Hardcoded `userId = undefined`, always redirects
-
-**What needs to be done:**
-
-- [ ] Get userId from auth session (requires Priority 1: Authentication)
-- [ ] Remove placeholder redirect logic
-- [ ] Implement proper auth check
-
-**Estimated Time:** 1 hour (after auth is implemented)
+- [x] Get userId from auth session using Supabase server client
+- [x] Remove placeholder redirect logic
+- [x] Implement proper auth check with redirect to login
+- [x] Course access verification using `checkCourseAccess()`
+- [x] Proper null handling for Supabase client
 
 ---
 
@@ -188,16 +185,13 @@ This document lists all unfinished features found in the Command codebase, organ
 1. User Authentication System (Dec 2024)
 2. Course Progress Loading (Dec 2024)
 3. Chat History UI (Dec 2024)
+4. Course Content Page Authentication (Dec 2024)
 
 ### Not Started (0% complete)
 
 1. Admin Dashboard
 2. Course Content System (content creation)
 3. Feedback System Enhancements
-
-### Partially Complete (50-80% complete)
-
-1. Course Content Page (auth exists, needs integration)
 
 ### Stubs/Placeholders (needs implementation)
 
@@ -211,12 +205,13 @@ This document lists all unfinished features found in the Command codebase, organ
 1. ~~**User Authentication** (4-6 hours)~~ ✅ DONE
 2. ~~**Course Progress Loading** (1-2 hours)~~ ✅ DONE
 3. ~~**Chat History UI** (3-4 hours)~~ ✅ DONE
-4. **Voice Agent Rate Limiting** (1 hour) - Security/abuse prevention
-5. **Admin Dashboard** (6-8 hours) - Management tools
-6. **Course Content System** (8-10 hours) - Content delivery
-7. **Feedback Enhancements** (3-4 hours) - Polish
+4. ~~**Course Content Page Authentication** (1 hour)~~ ✅ DONE
+5. **Voice Agent Rate Limiting** (1 hour) - Security/abuse prevention
+6. **Admin Dashboard** (6-8 hours) - Management tools
+7. **Course Content System** (8-10 hours) - Content delivery
+8. **Feedback Enhancements** (3-4 hours) - Polish
 
-**Total Estimated Time:** 17-26 hours (auth, progress, and history complete)
+**Total Estimated Time:** 16-25 hours (auth, progress, history, and course auth complete)
 
 ---
 
