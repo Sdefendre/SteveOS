@@ -273,7 +273,7 @@ The homepage (`/`) features a modern SaaS-style landing page built with performa
 - **Sections**: Hero, Features, Testimonials, Roadmap, Pricing, CTA, and Footer
 - **Performance**: All below-the-fold components are dynamically loaded with loading states
 - **Client-Side Rendering**: Wrapped in `SaaSLandingWrapper` with SSR disabled for optimal performance
-- **Three.js Background**: Interactive 3D background effects via `HeroThreeBackground`
+- **Topographic Background**: Military-inspired SVG contour line pattern (lightweight, no WebGL)
 - **Content Management**: Landing page content is managed in `constants/landing.ts` for easy updates
 
 ### Landing Page Components
@@ -298,7 +298,7 @@ The `/command` page provides an advanced AI-powered chat interface for VA benefi
 - **Rate Limiting**: Daily query limits with real-time tracking (20 free, 1000 premium)
 - **Knowledge Base**: Integrated search for VA benefits information
 - **Responsive Design**: Mobile-friendly with collapsible sidebar and sheet menu
-- **Three.js Background**: Immersive `CommandThreeBackground` component
+- **Topographic Background**: Military-inspired SVG contour line pattern
 - **Session Management**: Conversation IDs stored in sessionStorage for persistence
 - **Graceful Degradation**: Works without Supabase (unlimited rate limits for local dev)
 
@@ -307,7 +307,6 @@ The `/command` page provides an advanced AI-powered chat interface for VA benefi
 - `Chat.tsx` - Main chat interface with sidebar navigation and conversation history
 - `ChatSidebar.tsx` - Sidebar with conversation list, switching, and deletion
 - `CommandMessage.tsx` - Individual message rendering
-- `CommandThreeBackground.tsx` - Three.js background effects
 - `VoiceAgent.tsx` - Voice input component with microphone support
 
 Access the Command interface via the floating chat button or directly at `/command`.
@@ -328,7 +327,7 @@ The project uses lazy loading for non-critical client-side components to improve
 - **Homepage**: `SaaSLanding` component wrapped with SSR disabled for optimal performance
 - **Landing Sections**: Features, Roadmap, Pricing, Testimonials, CTA, and Footer are dynamically loaded
 - **Loading States**: Placeholder divs with minimum heights prevent layout shift during loading
-- **Command Interface**: Three.js backgrounds and voice components are client-only
+- **Command Interface**: Topographic background and voice components are client-only
 
 Components like `ScrollToTop`, `ChatFloatingButton`, and landing page sections are loaded only when needed to avoid hydration issues and improve performance.
 

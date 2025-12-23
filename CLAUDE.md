@@ -38,7 +38,7 @@ Command is an AI-powered education platform for veterans - a multi-page Next.js 
 - **Styling**: Tailwind CSS v4
 - **UI Components**: Shadcn UI in `components/ui/`
 - **Animations**: Framer Motion for all animations
-- **3D Graphics**: React Three Fiber + drei for backgrounds
+- **Backgrounds**: SVG-based topographic pattern (lightweight, no WebGL)
 - **AI SDK**: Vercel AI SDK with streaming support
 - **Database**: Supabase for conversations, rate limits, subscriptions
 - **Charts**: Recharts for financial visualizations
@@ -82,7 +82,7 @@ The core AI functionality is built around Grok models via xAI with comprehensive
 **Landing Page Components** (`components/landing/`):
 All sections dynamically imported for code splitting:
 
-- `HeroThreeBackground.tsx` - Three.js animated background for hero
+- `TopographicBackground.tsx` - SVG-based military-inspired contour line background
 - `LandingHero.tsx`, `LandingFeatures.tsx`, `LandingTestimonials.tsx`, etc.
 - `SaaSLandingWrapper.tsx` - Client-only wrapper with SSR disabled
 
@@ -90,7 +90,7 @@ All sections dynamically imported for code splitting:
 
 - `ClientOnlyComponents.tsx` - Wraps browser-only components (ScrollToTop, ChatFloatingButton)
 - Uses Next.js dynamic imports with `ssr: false` to avoid hydration issues
-- Three.js backgrounds and voice components are always client-only
+- Background and voice components are always client-only
 
 ### Data Management
 
@@ -148,7 +148,7 @@ All sections dynamically imported for code splitting:
 
 - Landing page sections lazy loaded with Suspense boundaries
 - VoiceAgent dynamically imported only when needed
-- Three.js backgrounds client-only with dynamic imports
+- Topographic background client-only with dynamic imports
 - Placeholder divs with min-heights prevent layout shift
 
 **Client-Side Rendering Strategy**:
